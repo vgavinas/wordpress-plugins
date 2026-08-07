@@ -1,0 +1,98 @@
+/* =========================================================
+   WC Order Note Templates — Admin Styles
+   ========================================================= */
+
+/* ── Settings page layout ── */
+.wc-ont-wrap h1 { margin-bottom: 16px; }
+
+.wc-ont-layout {
+    display: grid;
+    grid-template-columns: 420px 1fr;
+    gap: 24px;
+    margin-top: 16px;
+    align-items: start;
+}
+
+@media ( max-width: 900px ) {
+    .wc-ont-layout { grid-template-columns: 1fr; }
+}
+
+/* ── Cards ── */
+.wc-ont-form-card,
+.wc-ont-list-card {
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    padding: 20px 24px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.wc-ont-form-card h2,
+.wc-ont-list-card h2 {
+    margin-top: 0;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #f0f0f1;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+/* ── Table ── */
+.wc-ont-table { font-size: 13px; }
+.wc-ont-preview { color: #50575e; font-style: italic; }
+
+/* ── Badges ── */
+.wc-ont-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.wc-ont-badge--customer {
+    background: #d1f7c4;
+    color: #1c6c0b;
+}
+.wc-ont-badge--internal {
+    background: #fef3cd;
+    color: #6d4c00;
+}
+
+/* ── Meta box ── */
+.wc-ont-metabox { font-size: 13px; }
+
+.wc-ont-select {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 6px;
+    padding: 4px 6px;
+    border-radius: 3px;
+    border: 1px solid #8c8f94;
+    font-size: 13px;
+}
+
+#wc-ont-preview-text {
+    background: #f6f7f7;
+    border: 1px solid #c3c4c7;
+    border-radius: 3px;
+    padding: 6px 8px;
+    font-size: 12px;
+    color: #1d2327;
+    line-height: 1.5;
+}
+
+#wc-ont-insert-btn {
+    margin-top: 6px;
+    padding: 6px 12px;
+    font-size: 12px;
+}
+
+/* Highlight the note textarea briefly after insert */
+@keyframes wc-ont-flash {
+    0%   { background: #d1f7c4; }
+    100% { background: #fff;    }
+}
+.wc-ont-flashed {
+    animation: wc-ont-flash .8s ease;
+}
