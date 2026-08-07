@@ -3,7 +3,7 @@
  * Plugin Name: Order Note Templates for WooCommerce
  * Plugin URI:  https://wordpress.org/plugins/order-note-templates-for-woocommerce/
  * Description: Save and reuse order note templates in WooCommerce admin. Works with HPOS and WooCommerce Subscriptions.
- * Version:     1.1.1
+ * Version:     1.1.4
  * Author:      Pro Technologies Limited
  * Author URI:  https://pro-webdesign.co.uk
  * Text Domain: order-note-templates-for-woocommerce
@@ -29,7 +29,7 @@ if ( function_exists( 'ontfw_fs' ) ) {
      */
     if ( ! function_exists( 'ontfw_fs' ) ) {
 
-        define( 'WC_ONT_VERSION', '1.1.1' );
+        define( 'WC_ONT_VERSION', '1.1.4' );
         define( 'WC_ONT_FILE',    __FILE__ );
         define( 'WC_ONT_DIR',     plugin_dir_path( __FILE__ ) );
         define( 'WC_ONT_URL',     plugin_dir_url( __FILE__ ) );
@@ -103,26 +103,52 @@ if ( function_exists( 'ontfw_fs' ) ) {
             wc_ont_insert_defaults();
         }
 
+        /**
+         * Create or upgrade the templates table.
+         *
+         * The full schema — including the columns used only by Pro features —
+         * lives here so that dbDelta() can add anything that is missing on an
+         * existing install. Note: no "IF NOT EXISTS"; dbDelta() parses the table
+         * name with a regex and would read "IF" as the table name.
+         */
         function wc_ont_create_table() {
             global $wpdb;
             $table   = $wpdb->prefix . 'order_note_templates';
             $charset = $wpdb->get_charset_collate();
 
-            $sql = "CREATE TABLE IF NOT EXISTS {$table} (
-                id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-                title       VARCHAR(200)    NOT NULL,
-                note_text   TEXT            NOT NULL,
-                note_type   VARCHAR(20)     NOT NULL DEFAULT 'customer',
-                sort_order  INT             NOT NULL DEFAULT 0,
-                created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                PRIMARY KEY (id),
+            // dbDelta is picky: one field per line, two spaces after PRIMARY KEY.
+            $sql = "CREATE TABLE {$table} (
+                id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                title varchar(200) NOT NULL,
+                note_text text NOT NULL,
+                note_type varchar(20) NOT NULL DEFAULT 'customer',
+                category varchar(100) NOT NULL DEFAULT '',
+                pdf_attachment varchar(500) NOT NULL DEFAULT '',
+                sort_order int(11) NOT NULL DEFAULT 0,
+                created_at datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY  (id),
                 KEY note_type (note_type),
+                KEY category (category),
                 KEY sort_order (sort_order)
             ) {$charset};";
 
             require_once ABSPATH . 'wp-admin/includes/upgrade.php';
             dbDelta( $sql );
+
             update_option( 'wc_ont_db_version', WC_ONT_VERSION );
+        }
+
+        /**
+         * True when the given column exists on the templates table.
+         */
+        function wc_ont_column_exists( $column ) {
+            global $wpdb;
+            $table = $wpdb->prefix . 'order_note_templates';
+
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
+            $found = $wpdb->get_results( $wpdb->prepare( "SHOW COLUMNS FROM {$table} LIKE %s", $column ) );
+
+            return ! empty( $found );
         }
 
         function wc_ont_insert_defaults() {
@@ -165,9 +191,15 @@ if ( function_exists( 'ontfw_fs' ) ) {
                 return;
             }
 
-            if ( get_option( 'wc_ont_db_version' ) !== WC_ONT_VERSION ) {
+            /*
+             * Run the schema migration synchronously, before anything that
+             * writes to the table is loaded. Do not defer this to a hook —
+             * we are already inside plugins_loaded here.
+             */
+            if ( get_option( 'wc_ont_db_version' ) !== WC_ONT_VERSION
+                || ! wc_ont_column_exists( 'category' )
+                || ! wc_ont_column_exists( 'pdf_attachment' ) ) {
                 wc_ont_create_table();
-                update_option( 'wc_ont_db_version', WC_ONT_VERSION );
             }
 
             require_once WC_ONT_DIR . 'includes/class-admin-page.php';

@@ -13,8 +13,20 @@
     align-items: start;
 }
 
+/* Two cards of equal weight — Import / Export */
+.wc-ont-layout--even {
+    grid-template-columns: 1fr 1fr;
+}
+
+/* A single full-width card — Categories, Auto-insert */
+.wc-ont-panel {
+    margin-top: 16px;
+    max-width: 1100px;
+}
+
 @media ( max-width: 900px ) {
-    .wc-ont-layout { grid-template-columns: 1fr; }
+    .wc-ont-layout,
+    .wc-ont-layout--even { grid-template-columns: 1fr; }
 }
 
 /* ── Cards ── */
@@ -95,4 +107,51 @@
 }
 .wc-ont-flashed {
     animation: wc-ont-flash .8s ease;
+}
+
+/* ── Categories table ──
+   Natural column sizing: the name must never collapse to a few characters,
+   and the row of controls must stay on one line. */
+.wc-ont-cat-table {
+    table-layout: auto;
+}
+.wc-ont-cat-table th,
+.wc-ont-cat-table td {
+    vertical-align: middle;
+}
+.wc-ont-cat-name {
+    width: auto;
+    min-width: 180px;
+    word-break: normal;
+    overflow-wrap: anywhere;
+}
+.wc-ont-cat-count {
+    width: 90px;
+    white-space: nowrap;
+}
+.wc-ont-cat-actions {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.wc-ont-cat-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+}
+.wc-ont-cat-controls form {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0;
+}
+.wc-ont-cat-controls input[type="text"] {
+    width: 160px;
+    min-width: 120px;
+}
+
+@media ( max-width: 782px ) {
+    .wc-ont-cat-controls { flex-wrap: wrap; }
+    .wc-ont-cat-controls input[type="text"] { width: 100%; }
 }

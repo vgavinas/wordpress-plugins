@@ -34,7 +34,17 @@ class WC_ONT_Auto_Insert {
      */
     public function on_status_change( $order_id, $old_status, $new_status, $order ) {
         $rules = self::get_rules();
-        if ( empty( $rules ) ) return;
+        if ( empty( $rules ) ) {
+            return;
+        }
+
+        // The hook normally hands us the order, but never assume it.
+        if ( ! is_a( $order, 'WC_Abstract_Order' ) ) {
+            $order = wc_get_order( $order_id );
+        }
+        if ( ! $order ) {
+            return;
+        }
 
         foreach ( $rules as $rule ) {
             if ( empty( $rule['status'] ) || empty( $rule['template_id'] ) ) continue;
@@ -60,7 +70,7 @@ class WC_ONT_Auto_Insert {
         $next_payment = '';
         $start_date   = '';
 
-        if ( $order instanceof WC_Subscription ) {
+        if ( class_exists( 'WC_Subscription' ) && $order instanceof WC_Subscription ) {
             $next = $order->get_date( 'next_payment' );
             if ( $next ) $next_payment = date_i18n( get_option( 'date_format' ), strtotime( $next ) );
             $start = $order->get_date( 'start' );
@@ -127,7 +137,8 @@ class WC_ONT_Auto_Insert {
             echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( '✅ Auto-insert rules saved.', 'order-note-templates-for-woocommerce' ) . '</p></div>';
         }
         ?>
-        <div class="wc-ont-form-card" style="max-width:800px">
+        <div class="wc-ont-panel">
+            <div class="wc-ont-form-card">
             <h2>⚡ <?php esc_html_e( 'Auto-insert on Status Change', 'order-note-templates-for-woocommerce' ); ?></h2>
             <p><?php esc_html_e( 'Automatically add a note to an order when it moves to a specific status. Add as many rules as you need.', 'order-note-templates-for-woocommerce' ); ?></p>
 
@@ -197,6 +208,7 @@ class WC_ONT_Auto_Insert {
                     </button>
                 </p>
             </form>
+            </div>
         </div>
 
         <script>

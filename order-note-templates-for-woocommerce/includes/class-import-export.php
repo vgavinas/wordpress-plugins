@@ -26,7 +26,7 @@ class WC_ONT_Import_Export {
         global $wpdb;
         $table = esc_sql( $wpdb->prefix . 'order_note_templates' );
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        $templates = $wpdb->get_results( "SELECT title, note_text, note_type, sort_order FROM {$table} ORDER BY sort_order, title", ARRAY_A );
+        $templates = $wpdb->get_results( "SELECT title, note_text, note_type, category, pdf_attachment, sort_order FROM {$table} ORDER BY sort_order, title", ARRAY_A );
 
         $export = array(
             'version'   => WC_ONT_VERSION,
@@ -97,16 +97,30 @@ class WC_ONT_Import_Export {
                 ? $t['note_type']
                 : 'customer';
 
-            $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-                $wpdb->prefix . 'order_note_templates',
-                array(
-                    'title'      => sanitize_text_field( $t['title'] ),
-                    'note_text'  => sanitize_textarea_field( $t['note_text'] ),
-                    'note_type'  => $note_type,
-                    'sort_order' => absint( $t['sort_order'] ?? 0 ),
-                )
+            $row = array(
+                'title'      => sanitize_text_field( $t['title'] ),
+                'note_text'  => sanitize_textarea_field( $t['note_text'] ),
+                'note_type'  => $note_type,
+                'sort_order' => absint( $t['sort_order'] ?? 0 ),
             );
-            ++$imported;
+
+            /*
+             * Files exported by 1.1.0 and earlier have no category or
+             * pdf_attachment keys — fall back to empty so older backups
+             * still import cleanly.
+             */
+            if ( wc_ont_column_exists( 'category' ) ) {
+                $row['category'] = sanitize_text_field( $t['category'] ?? '' );
+            }
+            if ( wc_ont_column_exists( 'pdf_attachment' ) ) {
+                $row['pdf_attachment'] = esc_url_raw( $t['pdf_attachment'] ?? '' );
+            }
+
+            $inserted = $wpdb->insert( $wpdb->prefix . 'order_note_templates', $row ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+
+            if ( false !== $inserted ) {
+                ++$imported;
+            }
         }
 
         wp_safe_redirect( add_query_arg( array( 'import_msg' => 'success', 'import_count' => $imported ), $redirect ) );
@@ -133,7 +147,7 @@ class WC_ONT_Import_Export {
         }
         ?>
 
-        <div class="wc-ont-layout">
+        <div class="wc-ont-layout wc-ont-layout--even">
 
             <!-- Export -->
             <div class="wc-ont-form-card">

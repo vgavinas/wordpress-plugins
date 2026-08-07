@@ -4,7 +4,7 @@ Tags: woocommerce, order notes, templates, subscriptions, hpos
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.1
+Stable tag: 1.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -70,12 +70,30 @@ No. The plugin only loads its assets on WooCommerce order and subscription admin
 
 == Screenshots ==
 
-1. Template selector in the order sidebar
-2. Template management page (WooCommerce → Order Note Templates)
-3. Template with variables being inserted
-4. Works on WooCommerce Subscriptions screen
+1. Insert a saved template into an order note with one click
+2. Manage your templates from WooCommerce → Order Note Templates
+3. Variables are resolved automatically before the note is inserted
+4. Templates work on WooCommerce Subscriptions screens
+5. Group templates into categories
+6. Automatically add a note when an order changes status
 
 == Changelog ==
+
+= 1.1.4 =
+* Fixed: the Categories screen was squeezed into a narrow column, breaking category names across lines
+* Fixed: the delete button on the Categories screen wrapped onto a second line
+* Improved: Import / Export panels are now equal width; Delete and Rename buttons have accessible labels
+
+= 1.1.3 =
+* Fixed: a fatal error could occur when WooCommerce added an order note automatically
+* Fixed: PDF attachments were never actually linked to the note they belonged to
+* Improved: PDF files are now validated as local uploads before being emailed
+
+= 1.1.2 =
+* Fixed: templates were not saved when the Pro version was active — the database schema was missing the columns Pro features write to
+* Fixed: a failed save reported success instead of showing the error
+* Fixed: categories and PDF attachments were lost when exporting and importing templates
+* Improved: schema upgrades now run reliably on existing installs
 
 = 1.1.1 =
 * Fixed: corrected plugin slug to match WordPress.org repository

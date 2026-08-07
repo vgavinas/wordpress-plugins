@@ -59,7 +59,9 @@ class WC_ONT_Admin_Page {
     private function get_templates_for_js() {
         global $wpdb;
         $table = esc_sql( $wpdb->prefix . 'order_note_templates' );
-        $fields = wc_ont_is_pro() ? 'id, title, note_text, note_type, category' : 'id, title, note_text, note_type';
+        $fields = ( wc_ont_is_pro() && wc_ont_column_exists( 'category' ) )
+            ? 'id, title, note_text, note_type, category'
+            : 'id, title, note_text, note_type';
         // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,WordPress.DB.PreparedSQL.NotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
         return $wpdb->get_results( "SELECT {$fields} FROM {$table} ORDER BY note_type, sort_order, title", ARRAY_A );
     }
@@ -118,16 +120,16 @@ class WC_ONT_Admin_Page {
             'note_type'  => $note_type,
             'sort_order' => $sort_order,
         );
-        if ( wc_ont_is_pro() ) {
+        // Pro columns are only written when they actually exist on the table.
+        if ( wc_ont_is_pro() && wc_ont_column_exists( 'category' ) ) {
             $data['category'] = $category;
         }
 
-        // Pro: PDF attachment
-        if ( wc_ont_is_pro() ) {
+        if ( wc_ont_is_pro() && wc_ont_column_exists( 'pdf_attachment' ) ) {
             if ( ! empty( $_POST['remove_pdf'] ) ) {
                 $data['pdf_attachment'] = '';
             } elseif ( ! empty( $_FILES['pdf_attachment']['name'] ) ) {
-                $pdf_url = WC_ONT_PDF_Attachments::handle_upload( $id );
+                $pdf_url = WC_ONT_PDF_Attachments::handle_upload();
                 if ( $pdf_url ) {
                     $data['pdf_attachment'] = $pdf_url;
                 }
@@ -135,11 +137,23 @@ class WC_ONT_Admin_Page {
         }
 
         if ( $id ) {
-            $wpdb->update( $table, $data, array( 'id' => $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
-            $msg = 'updated';
+            $result = $wpdb->update( $table, $data, array( 'id' => $id ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching
+            $msg    = 'updated';
         } else {
-            $wpdb->insert( $table, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-            $msg = 'added';
+            $result = $wpdb->insert( $table, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $msg    = 'added';
+        }
+
+        /*
+         * $wpdb->update() legitimately returns 0 when nothing changed, so only
+         * a hard false counts as a failure. Never report success on a failed
+         * write — a green notice over a silently dropped template is worse
+         * than any error message.
+         */
+        if ( false === $result ) {
+            set_transient( 'wc_ont_db_error', $wpdb->last_error, 60 );
+            wp_safe_redirect( add_query_arg( array( 'page' => 'wc-ont-templates', 'message' => 'db_error' ), admin_url( 'admin.php' ) ) );
+            exit;
         }
 
         wp_safe_redirect( add_query_arg( array( 'page' => 'wc-ont-templates', 'message' => $msg ), admin_url( 'admin.php' ) ) );
@@ -174,6 +188,11 @@ class WC_ONT_Admin_Page {
             'updated' => array( 'success', __( 'Template updated.', 'order-note-templates-for-woocommerce' ) ),
             'deleted' => array( 'success', __( 'Template deleted.', 'order-note-templates-for-woocommerce' ) ),
             'empty'   => array( 'error',   __( 'Title and text cannot be empty.', 'order-note-templates-for-woocommerce' ) ),
+            'db_error' => array( 'error', sprintf(
+                /* translators: %s: database error message */
+                __( 'The template could not be saved. Database error: %s', 'order-note-templates-for-woocommerce' ),
+                esc_html( (string) get_transient( 'wc_ont_db_error' ) )
+            ) ),
             'limit'   => array( 'error',   sprintf(
                 /* translators: 1: current limit, 2: upgrade URL */
                 __( 'Free plan is limited to %1$d templates. <a href="%2$s">Upgrade to Professional</a> for unlimited templates.', 'order-note-templates-for-woocommerce' ),

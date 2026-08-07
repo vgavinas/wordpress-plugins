@@ -13,26 +13,8 @@ defined( 'ABSPATH' ) || exit;
 class WC_ONT_Categories {
 
     public function __construct() {
-        add_action( 'plugins_loaded',                    array( $this, 'maybe_add_column' ) );
         add_action( 'admin_post_wc_ont_save_category',   array( $this, 'handle_save_category' ) );
         add_action( 'admin_post_wc_ont_delete_category', array( $this, 'handle_delete_category' ) );
-    }
-
-    /**
-     * Add category column if it doesn't exist yet.
-     */
-    public function maybe_add_column() {
-        global $wpdb;
-        $table = $wpdb->prefix . 'order_note_templates';
-
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
-        $col = $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'category'" );
-        if ( empty( $col ) ) {
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange,WordPress.DB.PreparedSQL.InterpolatedNotPrepared,PluginCheck.Security.DirectDB.UnescapedDBParameter
-            $wpdb->query( "ALTER TABLE {$table} ADD COLUMN category VARCHAR(100) NOT NULL DEFAULT '' AFTER note_type" );
-        }
     }
 
     /**
@@ -61,7 +43,7 @@ class WC_ONT_Categories {
             echo '<div class="notice notice-success is-dismissible"><p>' . esc_html( $messages[ $msg ] ) . '</p></div>';
         }
         ?>
-        <div class="wc-ont-layout">
+        <div class="wc-ont-panel">
             <div class="wc-ont-form-card">
                 <h2>🏷️ <?php esc_html_e( 'Template Categories', 'order-note-templates-for-woocommerce' ); ?></h2>
                 <p><?php esc_html_e( 'Categories are created automatically when you assign them to templates. Here you can rename or delete existing categories.', 'order-note-templates-for-woocommerce' ); ?></p>
@@ -69,12 +51,12 @@ class WC_ONT_Categories {
                 <?php if ( empty( $categories ) ) : ?>
                     <p><em><?php esc_html_e( 'No categories yet. Add a category when creating or editing a template.', 'order-note-templates-for-woocommerce' ); ?></em></p>
                 <?php else : ?>
-                    <table class="wp-list-table widefat fixed striped wc-ont-table">
+                    <table class="wp-list-table widefat striped wc-ont-table wc-ont-cat-table">
                         <thead>
                             <tr>
-                                <th><?php esc_html_e( 'Category Name', 'order-note-templates-for-woocommerce' ); ?></th>
-                                <th style="width:80px"><?php esc_html_e( 'Templates', 'order-note-templates-for-woocommerce' ); ?></th>
-                                <th style="width:200px"><?php esc_html_e( 'Actions', 'order-note-templates-for-woocommerce' ); ?></th>
+                                <th class="wc-ont-cat-name"><?php esc_html_e( 'Category Name', 'order-note-templates-for-woocommerce' ); ?></th>
+                                <th class="wc-ont-cat-count"><?php esc_html_e( 'Templates', 'order-note-templates-for-woocommerce' ); ?></th>
+                                <th class="wc-ont-cat-actions"><?php esc_html_e( 'Actions', 'order-note-templates-for-woocommerce' ); ?></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -85,29 +67,35 @@ class WC_ONT_Categories {
                             $count = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE category = %s", $cat ) );
                             ?>
                             <tr>
-                                <td><strong><?php echo esc_html( $cat ); ?></strong></td>
-                                <td><?php echo absint( $count ); ?></td>
-                                <td>
-                                    <!-- Rename inline form -->
-                                    <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline-flex;gap:4px">
-                                        <?php wp_nonce_field( 'wc_ont_save_category' ); ?>
-                                        <input type="hidden" name="action" value="wc_ont_save_category">
-                                        <input type="hidden" name="old_category" value="<?php echo esc_attr( $cat ); ?>">
-                                        <input type="text" name="new_category" value="<?php echo esc_attr( $cat ); ?>"
-                                               class="regular-text" style="width:140px" required>
-                                        <button type="submit" class="button button-small">✏️ <?php esc_html_e( 'Rename', 'order-note-templates-for-woocommerce' ); ?></button>
-                                    </form>
+                                <td class="wc-ont-cat-name"><strong><?php echo esc_html( $cat ); ?></strong></td>
+                                <td class="wc-ont-cat-count"><?php echo absint( $count ); ?></td>
+                                <td class="wc-ont-cat-actions">
+                                    <div class="wc-ont-cat-controls">
+                                        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                                            <?php wp_nonce_field( 'wc_ont_save_category' ); ?>
+                                            <input type="hidden" name="action" value="wc_ont_save_category">
+                                            <input type="hidden" name="old_category" value="<?php echo esc_attr( $cat ); ?>">
+                                            <label class="screen-reader-text" for="wc-ont-rename-<?php echo esc_attr( md5( $cat ) ); ?>">
+                                                <?php esc_html_e( 'New category name', 'order-note-templates-for-woocommerce' ); ?>
+                                            </label>
+                                            <input type="text" id="wc-ont-rename-<?php echo esc_attr( md5( $cat ) ); ?>"
+                                                   name="new_category" value="<?php echo esc_attr( $cat ); ?>" required>
+                                            <button type="submit" class="button button-small">
+                                                <?php esc_html_e( 'Rename', 'order-note-templates-for-woocommerce' ); ?>
+                                            </button>
+                                        </form>
 
-                                    <!-- Delete form -->
-                                    <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline">
-                                        <?php wp_nonce_field( 'wc_ont_delete_category' ); ?>
-                                        <input type="hidden" name="action" value="wc_ont_delete_category">
-                                        <input type="hidden" name="category" value="<?php echo esc_attr( $cat ); ?>">
-                                        <button type="submit" class="button button-small button-link-delete"
-                                                onclick="return confirm('<?php esc_attr_e( 'Remove this category from all templates?', 'order-note-templates-for-woocommerce' ); ?>')">
-                                            🗑️
-                                        </button>
-                                    </form>
+                                        <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+                                            <?php wp_nonce_field( 'wc_ont_delete_category' ); ?>
+                                            <input type="hidden" name="action" value="wc_ont_delete_category">
+                                            <input type="hidden" name="category" value="<?php echo esc_attr( $cat ); ?>">
+                                            <button type="submit" class="button button-small button-link-delete"
+                                                    aria-label="<?php echo esc_attr( sprintf( /* translators: %s: category name */ __( 'Delete category %s', 'order-note-templates-for-woocommerce' ), $cat ) ); ?>"
+                                                    onclick="return confirm('<?php echo esc_js( sprintf( /* translators: %s: category name */ __( 'Remove the category "%s" from all templates?', 'order-note-templates-for-woocommerce' ), $cat ) ); ?>')">
+                                                <?php esc_html_e( 'Delete', 'order-note-templates-for-woocommerce' ); ?>
+                                            </button>
+                                        </form>
+                                    </div>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

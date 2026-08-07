@@ -144,8 +144,22 @@
         } );
 
         $( '#wc-ont-insert-btn' ).on( 'click', function () {
-            var resolved = $( '#wc-ont-preview-text' ).val();
-            var noteType = $( '#wc-ont-select' ).find( ':selected' ).data( 'type' );
+            var $sel       = $( '#wc-ont-select' );
+            var resolved   = $( '#wc-ont-preview-text' ).val();
+            var noteType   = $sel.find( ':selected' ).data( 'type' );
+            var templateId = parseInt( $sel.val(), 10 );
+
+            // Tell the server which template this note came from, so a PDF
+            // attached to it can be picked up when the note is saved.
+            if ( isPro && orderId && templateId ) {
+                $.post( window.wcOnt.ajax_url, {
+                    action      : 'wc_ont_mark_template',
+                    nonce       : window.wcOnt.nonce,
+                    order_id    : orderId,
+                    template_id : templateId,
+                } );
+            }
+
             insertNote( resolved, noteType );
         } );
     }
