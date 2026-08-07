@@ -4,7 +4,7 @@ Tags: woocommerce, order notes, templates, subscriptions, hpos
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -76,6 +76,15 @@ No. The plugin only loads its assets on WooCommerce order and subscription admin
 4. Works on WooCommerce Subscriptions screen
 
 == Changelog ==
+
+= 1.1.1 =
+* Fixed: corrected plugin slug to match WordPress.org repository
+
+= 1.1.0 =
+* Added: Import/Export templates (JSON)
+* Added: Template categories with grouping in the note selector
+* Added: Auto-insert template on order status change
+* Added: PDF attachments support
 
 = 1.0.1 =
 * Added support for HPOS subscription screen (`woocommerce_page_wc-orders--shop_subscription`)

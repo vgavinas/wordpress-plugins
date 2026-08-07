@@ -2,11 +2,14 @@
 
 ## Plugin Info
 - **Slug:** order-note-templates-for-woocommerce
-- **Version:** 1.1.0
+- **Version:** 1.1.1
 - **GitHub:** https://github.com/vgavinas/wordpress-plugins
 - **WordPress.org:** submitted August 7, 2026 — awaiting review
 - **Freemius Product ID:** 36694
 - **Freemius function:** ontfw_fs()
+
+> ⚠️ The Freemius slug in the SDK snippet MUST match the WordPress.org slug exactly:
+> `order-note-templates-for-woocommerce`. A mismatch breaks free-version auto-updates.
 
 ## Freemius
 - **Account:** dashboard.freemius.com
@@ -64,7 +67,7 @@ order-note-templates-for-woocommerce/
 
 ## Key Constants
 - `WC_ONT_FREE_LIMIT = 3` — max templates on free plan
-- `WC_ONT_VERSION = '1.1.0'`
+- `WC_ONT_VERSION = '1.1.1'`
 
 ## How to Test Pro Features
 1. Install plugin on WordPress site with WooCommerce
@@ -84,6 +87,10 @@ order-note-templates-for-woocommerce/
 - [ ] If approved on WordPress.org → upload free version via SVN
 
 ## Changelog
+### 1.1.1
+- Fixed truncated slug in Freemius SDK config (`...woocommerc` → `...woocommerce`)
+- Product title in Freemius corrected to full name
+
 ### 1.1.0
 - Pro: Import/Export templates (JSON)
 - Pro: Template categories with grouping in meta box dropdown
