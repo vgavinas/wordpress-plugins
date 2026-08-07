@@ -10,6 +10,7 @@
     'use strict';
 
     var templates = window.wcOnt ? window.wcOnt.templates : [];
+    var isPro     = window.wcOnt ? !! window.wcOnt.is_pro : false;
     var orderId   = 0;
     var orderData = {};
     var context   = 'order'; // 'order' | 'subscription'
@@ -33,30 +34,79 @@
     } );
 
     /* ------------------------------------------------------------------ */
-    /* Populate <select>                                                     */
+    /* Populate <select> — grouped by category (Pro) or note type (Free)   */
     /* ------------------------------------------------------------------ */
     function populateSelect() {
-        var $customer = $( '#wc-ont-group-customer' );
-        var $internal = $( '#wc-ont-group-internal' );
+        var $select = $( '#wc-ont-select' );
 
-        $.each( templates, function ( _, t ) {
-            var $opt = $( '<option>' )
-                .val( t.id )
-                .text( t.title )
-                .data( 'text', t.note_text )
-                .data( 'type', t.note_type );
+        // Remove existing optgroups
+        $select.find( 'optgroup' ).remove();
 
-            if ( t.note_type === 'internal' ) {
-                $internal.append( $opt );
-            } else {
-                $customer.append( $opt );
+        if ( isPro ) {
+            // Group by category first, then by note type within each category
+            var categorized   = {};
+            var uncategorized = [];
+
+            $.each( templates, function ( _, t ) {
+                var cat = t.category || '';
+                if ( cat ) {
+                    if ( ! categorized[ cat ] ) categorized[ cat ] = [];
+                    categorized[ cat ].push( t );
+                } else {
+                    uncategorized.push( t );
+                }
+            } );
+
+            // Render categorized groups
+            $.each( categorized, function ( cat, items ) {
+                var $group = $( '<optgroup>' ).attr( 'label', '🏷️ ' + cat );
+                $.each( items, function ( _, t ) {
+                    $group.append( makeOption( t ) );
+                } );
+                $select.append( $group );
+            } );
+
+            // Render uncategorized split by note type
+            if ( uncategorized.length ) {
+                var $customer = $( '<optgroup>' ).attr( 'label', '👤 Customer notes' );
+                var $internal = $( '<optgroup>' ).attr( 'label', '🔒 Private notes' );
+
+                $.each( uncategorized, function ( _, t ) {
+                    if ( t.note_type === 'internal' ) {
+                        $internal.append( makeOption( t ) );
+                    } else {
+                        $customer.append( makeOption( t ) );
+                    }
+                } );
+
+                if ( $customer.children().length ) $select.append( $customer );
+                if ( $internal.children().length ) $select.append( $internal );
             }
-        } );
 
-        // Remove empty optgroups
-        $( '#wc-ont-select optgroup' ).each( function () {
-            if ( ! $( this ).children().length ) $( this ).remove();
-        } );
+        } else {
+            // Free: simple two groups
+            var $customer = $( '<optgroup>' ).attr( 'label', '👤 Customer notes' );
+            var $internal = $( '<optgroup>' ).attr( 'label', '🔒 Private notes' );
+
+            $.each( templates, function ( _, t ) {
+                if ( t.note_type === 'internal' ) {
+                    $internal.append( makeOption( t ) );
+                } else {
+                    $customer.append( makeOption( t ) );
+                }
+            } );
+
+            if ( $customer.children().length ) $select.append( $customer );
+            if ( $internal.children().length ) $select.append( $internal );
+        }
+    }
+
+    function makeOption( t ) {
+        return $( '<option>' )
+            .val( t.id )
+            .text( t.title )
+            .data( 'text', t.note_text )
+            .data( 'type', t.note_type );
     }
 
     /* ------------------------------------------------------------------ */
@@ -126,9 +176,6 @@
 
     /* ------------------------------------------------------------------ */
     /* Insert text into the note textarea                                   */
-    /*                                                                      */
-    /* Order screens:        #order_note  +  #order_note_type              */
-    /* Subscription screens: #wcs_add_note_content  +  #wcs_note_type      */
     /* ------------------------------------------------------------------ */
     function insertNote( text, noteType ) {
         var $noteText, $noteTypeField;

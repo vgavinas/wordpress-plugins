@@ -3,7 +3,7 @@
  * Plugin Name: Order Note Templates for WooCommerce
  * Plugin URI:  https://wordpress.org/plugins/order-note-templates-for-woocommerce/
  * Description: Save and reuse order note templates in WooCommerce admin. Works with HPOS and WooCommerce Subscriptions.
- * Version:     1.0.1
+ * Version:     1.1.0
  * Author:      Pro Technologies Limited
  * Author URI:  https://pro-webdesign.co.uk
  * Text Domain: order-note-templates-for-woocommerce
@@ -19,106 +19,161 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WC_ONT_VERSION', '1.0.1' );
-define( 'WC_ONT_FILE',    __FILE__ );
-define( 'WC_ONT_DIR',     plugin_dir_path( __FILE__ ) );
-define( 'WC_ONT_URL',     plugin_dir_url( __FILE__ ) );
+// Auto-deactivate free version when Pro is activated
+if ( function_exists( 'ontfw_fs' ) ) {
+    ontfw_fs()->set_basename( true, __FILE__ );
+} else {
+    /**
+     * DO NOT REMOVE THIS IF. IT IS ESSENTIAL FOR THE
+     * `function_exists` CALL ABOVE TO PROPERLY WORK.
+     */
+    if ( ! function_exists( 'ontfw_fs' ) ) {
 
-/* -------------------------------------------------------------------------
- * HPOS compatibility declaration
- * ---------------------------------------------------------------------- */
-add_action( 'before_woocommerce_init', function () {
-    if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
-        \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
-            'custom_order_tables',
-            __FILE__,
-            true
-        );
-    }
-} );
+        define( 'WC_ONT_VERSION', '1.1.0' );
+        define( 'WC_ONT_FILE',    __FILE__ );
+        define( 'WC_ONT_DIR',     plugin_dir_path( __FILE__ ) );
+        define( 'WC_ONT_URL',     plugin_dir_url( __FILE__ ) );
 
-/* -------------------------------------------------------------------------
- * Activation
- * ---------------------------------------------------------------------- */
-register_activation_hook( WC_ONT_FILE, 'wc_ont_activate' );
-function wc_ont_activate() {
-    wc_ont_create_table();
-    wc_ont_insert_defaults();
-}
+        /* -------------------------------------------------------------------------
+         * Freemius SDK
+         * ---------------------------------------------------------------------- */
+        function ontfw_fs() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+            global $ontfw_fs; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 
-function wc_ont_create_table() {
-    global $wpdb;
-    $table   = $wpdb->prefix . 'order_note_templates';
-    $charset = $wpdb->get_charset_collate();
+            if ( ! isset( $ontfw_fs ) ) {
+                require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
 
-    $sql = "CREATE TABLE IF NOT EXISTS {$table} (
-        id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-        title       VARCHAR(200)    NOT NULL,
-        note_text   TEXT            NOT NULL,
-        note_type   VARCHAR(20)     NOT NULL DEFAULT 'customer',
-        sort_order  INT             NOT NULL DEFAULT 0,
-        created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
-        PRIMARY KEY (id),
-        KEY note_type (note_type),
-        KEY sort_order (sort_order)
-    ) {$charset};";
+                $ontfw_fs = fs_dynamic_init( array( // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+                    'id'                  => '36694',
+                    'slug'                => 'order-note-templates-for-woocommerc',
+                    'type'                => 'plugin',
+                    'public_key'          => 'pk_cf33727630f61efd2baf1a4b67938',
+                    'is_premium'          => true,
+                    'premium_suffix'      => 'Professional',
+                    'has_premium_version' => true,
+                    'has_addons'          => false,
+                    'has_paid_plans'      => true,
+                    'is_org_compliant'    => true,
+                    // Automatically removed in the free version.
+                    'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
+                    'trial'               => array(
+                        'days'               => 14,
+                        'is_require_payment' => false,
+                    ),
+                    'menu'                => array(
+                        'support' => false,
+                    ),
+                ) );
+            }
 
-    require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-    dbDelta( $sql );
-    update_option( 'wc_ont_db_version', WC_ONT_VERSION );
-}
+            return $ontfw_fs;
+        }
 
-function wc_ont_insert_defaults() {
-    global $wpdb;
-    $table = esc_sql( $wpdb->prefix . 'order_note_templates' );
+        ontfw_fs();
+        do_action( 'ontfw_fs_loaded' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
-    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-    if ( $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" ) > 0 ) {
-        return;
-    }
-
-    $defaults = array(
-        array( 'Order received',             'Your order #{order_id} has been received and is being processed. We will notify you when it ships.',           'customer', 10 ),
-        array( 'Order shipped',              'Your order #{order_id} has been shipped. Tracking number: [enter tracking]. Expected delivery: 3-5 days.',    'customer', 20 ),
-        array( 'Shipping delay',             'Dear {customer_name}, shipment of order #{order_id} is delayed by 1-2 days. We apologise for the inconvenience.', 'customer', 30 ),
-        array( 'Clarification needed',       'Please clarify the details of order #{order_id}: [specify what needs clarification].',                         'customer', 40 ),
-        array( 'Refund approved',            'Refund for order #{order_id} has been approved. Funds will arrive within 5-7 business days.',                  'customer', 50 ),
-        array( '[Internal] Awaiting stock',  'Waiting for warehouse stock confirmation.',   'internal', 10 ),
-        array( '[Internal] Payment issue',   'Manual payment verification required.',       'internal', 20 ),
-        array( '[Internal] VIP customer',    'VIP customer — priority processing.',         'internal', 30 ),
-    );
-
-    foreach ( $defaults as $d ) {
-        $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
-            $table,
-            array(
-                'title'      => $d[0],
-                'note_text'  => $d[1],
-                'note_type'  => $d[2],
-                'sort_order' => $d[3],
-            )
-        );
-    }
-}
-
-/* -------------------------------------------------------------------------
- * Boot
- * ---------------------------------------------------------------------- */
-add_action( 'plugins_loaded', 'wc_ont_init' );
-function wc_ont_init() {
-    if ( ! class_exists( 'WooCommerce' ) ) {
-        add_action( 'admin_notices', function () {
-            echo '<div class="notice notice-error"><p><strong>Order Note Templates for WooCommerce</strong>: WooCommerce must be active.</p></div>';
+        /* -------------------------------------------------------------------------
+         * HPOS compatibility
+         * ---------------------------------------------------------------------- */
+        add_action( 'before_woocommerce_init', function () {
+            if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+                \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility(
+                    'custom_order_tables',
+                    __FILE__,
+                    true
+                );
+            }
         } );
-        return;
-    }
 
-    if ( get_option( 'wc_ont_db_version' ) !== WC_ONT_VERSION ) {
-        wc_ont_create_table();
-        update_option( 'wc_ont_db_version', WC_ONT_VERSION );
-    }
+        /* -------------------------------------------------------------------------
+         * Helpers
+         * ---------------------------------------------------------------------- */
+        function wc_ont_is_pro() {
+            return function_exists( 'ontfw_fs' ) && ontfw_fs()->can_use_premium_code__premium_only();
+        }
 
-    require_once WC_ONT_DIR . 'includes/class-admin-page.php';
-    require_once WC_ONT_DIR . 'includes/class-order-meta-box.php';
-    require_once WC_ONT_DIR . 'includes/class-ajax.php';
-}
+        define( 'WC_ONT_FREE_LIMIT', 3 );
+
+        /* -------------------------------------------------------------------------
+         * Activation
+         * ---------------------------------------------------------------------- */
+        register_activation_hook( __FILE__, 'wc_ont_activate' );
+        function wc_ont_activate() {
+            wc_ont_create_table();
+            wc_ont_insert_defaults();
+        }
+
+        function wc_ont_create_table() {
+            global $wpdb;
+            $table   = $wpdb->prefix . 'order_note_templates';
+            $charset = $wpdb->get_charset_collate();
+
+            $sql = "CREATE TABLE IF NOT EXISTS {$table} (
+                id          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+                title       VARCHAR(200)    NOT NULL,
+                note_text   TEXT            NOT NULL,
+                note_type   VARCHAR(20)     NOT NULL DEFAULT 'customer',
+                sort_order  INT             NOT NULL DEFAULT 0,
+                created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                PRIMARY KEY (id),
+                KEY note_type (note_type),
+                KEY sort_order (sort_order)
+            ) {$charset};";
+
+            require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+            dbDelta( $sql );
+            update_option( 'wc_ont_db_version', WC_ONT_VERSION );
+        }
+
+        function wc_ont_insert_defaults() {
+            global $wpdb;
+            $table = esc_sql( $wpdb->prefix . 'order_note_templates' );
+
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+            if ( $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" ) > 0 ) {
+                return;
+            }
+
+            $defaults = array(
+                array( 'Order received',            'Your order #{order_id} has been received and is being processed.',    'customer', 10 ),
+                array( 'Order shipped',             'Your order #{order_id} has been shipped. Expected delivery: 3-5 days.', 'customer', 20 ),
+                array( '[Internal] Awaiting stock', 'Waiting for warehouse stock confirmation.',                           'internal', 10 ),
+            );
+
+            foreach ( $defaults as $d ) {
+                $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+                    $wpdb->prefix . 'order_note_templates',
+                    array(
+                        'title'      => $d[0],
+                        'note_text'  => $d[1],
+                        'note_type'  => $d[2],
+                        'sort_order' => $d[3],
+                    )
+                );
+            }
+        }
+
+        /* -------------------------------------------------------------------------
+         * Boot
+         * ---------------------------------------------------------------------- */
+        add_action( 'plugins_loaded', 'wc_ont_init' );
+        function wc_ont_init() {
+            if ( ! class_exists( 'WooCommerce' ) ) {
+                add_action( 'admin_notices', function () {
+                    echo '<div class="notice notice-error"><p><strong>Order Note Templates for WooCommerce</strong>: WooCommerce must be active.</p></div>';
+                } );
+                return;
+            }
+
+            if ( get_option( 'wc_ont_db_version' ) !== WC_ONT_VERSION ) {
+                wc_ont_create_table();
+                update_option( 'wc_ont_db_version', WC_ONT_VERSION );
+            }
+
+            require_once WC_ONT_DIR . 'includes/class-admin-page.php';
+            require_once WC_ONT_DIR . 'includes/class-order-meta-box.php';
+            require_once WC_ONT_DIR . 'includes/class-ajax.php';
+        }
+
+    } // end if ( ! function_exists )
+} // end else

@@ -1,31 +1,31 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Injects the template selector into the WooCommerce order/subscription notes meta box.
- *
- * Supports:
- *  - Classic orders      (CPT shop_order)
- *  - HPOS orders         (woocommerce_page_wc-orders)
- *  - Classic subscriptions (CPT shop_subscription)
- *  - HPOS subscriptions  (woocommerce_page_wc-orders--shop_subscription)
- */
 class WC_ONT_Order_Meta_Box {
 
     public function __construct() {
         add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
         add_action( 'add_meta_boxes_woocommerce_page_wc-orders', array( $this, 'add_meta_box' ) );
-        add_action( 'add_meta_boxes_woocommerce_page_wc-orders--shop_subscription', array( $this, 'add_meta_box' ) );
+
+        // Pro only: subscription screens
+        if ( wc_ont_is_pro() ) {
+            add_action( 'add_meta_boxes_woocommerce_page_wc-orders--shop_subscription', array( $this, 'add_meta_box' ) );
+        }
     }
 
     public function add_meta_box() {
         $screens = array(
             'shop_order',
-            'shop_subscription',
             'woocommerce_page_wc-orders',
-            'woocommerce_page_wc-subscriptions',
-            'woocommerce_page_wc-orders--shop_subscription',
         );
+
+        // Pro only: subscription screens
+        if ( wc_ont_is_pro() ) {
+            $screens[] = 'shop_subscription';
+            $screens[] = 'woocommerce_page_wc-subscriptions';
+            $screens[] = 'woocommerce_page_wc-orders--shop_subscription';
+        }
+
         foreach ( $screens as $screen ) {
             add_meta_box(
                 'wc-ont-selector',
@@ -54,9 +54,7 @@ class WC_ONT_Order_Meta_Box {
 
     public function render( $post_or_order ) {
         $context = $this->get_context( $post_or_order );
-        $label   = 'subscription' === $context
-            ? __( 'subscription', 'order-note-templates-for-woocommerce' )
-            : __( 'order', 'order-note-templates-for-woocommerce' );
+        $is_pro  = wc_ont_is_pro();
         ?>
         <div class="wc-ont-metabox" id="wc-ont-metabox"
              data-context="<?php echo esc_attr( $context ); ?>">
@@ -80,15 +78,13 @@ class WC_ONT_Order_Meta_Box {
                 </p>
             </div>
 
-            <p class="description" style="margin-top:6px; font-size:11px">
-                <?php
-                printf(
-                    /* translators: %s: 'order' or 'subscription' */
-                    esc_html__( 'The template will fill the %s note field. Click "Add" in the notes panel to save it.', 'order-note-templates-for-woocommerce' ),
-                    esc_html( $label )
-                );
-                ?>
-            </p>
+            <?php if ( ! $is_pro ) : ?>
+                <p style="margin-top:8px;font-size:11px;color:#7c3aed">
+                    <a href="<?php echo esc_url( function_exists( 'ontfw_fs' ) ? ontfw_fs()->get_upgrade_url() : '#' ); ?>">
+                        ⭐ <?php esc_html_e( 'Upgrade for unlimited templates & subscriptions support', 'order-note-templates-for-woocommerce' ); ?>
+                    </a>
+                </p>
+            <?php endif; ?>
 
             <p style="margin:6px 0 0">
                 <a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-ont-templates' ) ); ?>"
