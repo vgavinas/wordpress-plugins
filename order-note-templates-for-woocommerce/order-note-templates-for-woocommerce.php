@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: WooCommerce Order Note Templates
- * Plugin URI:  https://wordpress.org/plugins/wc-order-note-templates/
+ * Plugin Name: Order Note Templates for WooCommerce
+ * Plugin URI:  https://wordpress.org/plugins/order-note-templates-for-woocommerce/
  * Description: Save and reuse order note templates in WooCommerce admin. Works with HPOS and WooCommerce Subscriptions.
  * Version:     1.0.1
  * Author:      Pro Technologies Limited
- * Author URI:  https://pro-technologies.co.uk
- * Text Domain: wc-ont
+ * Author URI:  https://pro-webdesign.co.uk
+ * Text Domain: order-note-templates-for-woocommerce
  * Domain Path: /languages
  * Requires at least: 5.8
  * Requires PHP: 7.4
@@ -70,30 +70,34 @@ function wc_ont_create_table() {
 
 function wc_ont_insert_defaults() {
     global $wpdb;
-    $table = $wpdb->prefix . 'order_note_templates';
+    $table = esc_sql( $wpdb->prefix . 'order_note_templates' );
 
+    // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.InterpolatedNotPrepared
     if ( $wpdb->get_var( "SELECT COUNT(*) FROM {$table}" ) > 0 ) {
         return;
     }
 
-    $defaults = [
-        [ 'Order received',       'Your order #{order_id} has been received and is being processed. We will notify you when it ships.',          'customer', 10 ],
-        [ 'Order shipped',        'Your order #{order_id} has been shipped. Tracking number: [enter tracking]. Expected delivery: 3-5 days.',    'customer', 20 ],
-        [ 'Shipping delay',       'Dear {customer_name}, shipment of order #{order_id} is delayed by 1-2 days. We apologise for the inconvenience.', 'customer', 30 ],
-        [ 'Clarification needed', 'Please clarify the details of order #{order_id}: [specify what needs clarification].',                        'customer', 40 ],
-        [ 'Refund approved',      'Refund for order #{order_id} has been approved. Funds will arrive within 5-7 business days.',                 'customer', 50 ],
-        [ '[Internal] Awaiting stock',   'Waiting for warehouse stock confirmation.',   'internal', 10 ],
-        [ '[Internal] Payment issue',    'Manual payment verification required.',       'internal', 20 ],
-        [ '[Internal] VIP customer',     'VIP customer — priority processing.',         'internal', 30 ],
-    ];
+    $defaults = array(
+        array( 'Order received',             'Your order #{order_id} has been received and is being processed. We will notify you when it ships.',           'customer', 10 ),
+        array( 'Order shipped',              'Your order #{order_id} has been shipped. Tracking number: [enter tracking]. Expected delivery: 3-5 days.',    'customer', 20 ),
+        array( 'Shipping delay',             'Dear {customer_name}, shipment of order #{order_id} is delayed by 1-2 days. We apologise for the inconvenience.', 'customer', 30 ),
+        array( 'Clarification needed',       'Please clarify the details of order #{order_id}: [specify what needs clarification].',                         'customer', 40 ),
+        array( 'Refund approved',            'Refund for order #{order_id} has been approved. Funds will arrive within 5-7 business days.',                  'customer', 50 ),
+        array( '[Internal] Awaiting stock',  'Waiting for warehouse stock confirmation.',   'internal', 10 ),
+        array( '[Internal] Payment issue',   'Manual payment verification required.',       'internal', 20 ),
+        array( '[Internal] VIP customer',    'VIP customer — priority processing.',         'internal', 30 ),
+    );
 
     foreach ( $defaults as $d ) {
-        $wpdb->insert( $table, [
-            'title'      => $d[0],
-            'note_text'  => $d[1],
-            'note_type'  => $d[2],
-            'sort_order' => $d[3],
-        ] );
+        $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+            $table,
+            array(
+                'title'      => $d[0],
+                'note_text'  => $d[1],
+                'note_type'  => $d[2],
+                'sort_order' => $d[3],
+            )
+        );
     }
 }
 
@@ -104,7 +108,7 @@ add_action( 'plugins_loaded', 'wc_ont_init' );
 function wc_ont_init() {
     if ( ! class_exists( 'WooCommerce' ) ) {
         add_action( 'admin_notices', function () {
-            echo '<div class="notice notice-error"><p><strong>WC Order Note Templates</strong>: WooCommerce must be active.</p></div>';
+            echo '<div class="notice notice-error"><p><strong>Order Note Templates for WooCommerce</strong>: WooCommerce must be active.</p></div>';
         } );
         return;
     }

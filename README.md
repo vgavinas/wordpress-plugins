@@ -1,10 +1,10 @@
 # WordPress & WooCommerce Plugins
 
-WordPress and WooCommerce plugins developed by [Pro Technologies Limited](https://pro-technologies.co.uk).
+WordPress and WooCommerce plugins developed by [Pro Technologies Limited](https://pro-webdesign.co.uk).
 
 ## Plugins
 
-### [WooCommerce Order Note Templates](./wc-order-note-templates/)
+### [Order Note Templates for WooCommerce](./order-note-templates-for-woocommerce/)
 Save and reuse order note templates in WooCommerce admin. Full HPOS and WooCommerce Subscriptions support.
 
 **Features:**
@@ -14,6 +14,8 @@ Save and reuse order note templates in WooCommerce admin. Full HPOS and WooComme
 - Full HPOS (High-Performance Order Storage) support
 - WooCommerce Subscriptions compatible
 - Customer and private note types
+
+**WordPress.org:** https://wordpress.org/plugins/order-note-templates-for-woocommerce/
 
 ## License
 

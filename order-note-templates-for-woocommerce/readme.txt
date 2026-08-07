@@ -1,4 +1,4 @@
-=== WooCommerce Order Note Templates ===
+=== Order Note Templates for WooCommerce ===
 Contributors: protechnologies
 Tags: woocommerce, order notes, templates, subscriptions, hpos
 Requires at least: 5.8
