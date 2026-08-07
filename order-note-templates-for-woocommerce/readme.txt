@@ -4,7 +4,7 @@ Tags: woocommerce, order notes, templates, subscriptions, hpos
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.4
+Stable tag: 1.1.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,12 @@ No. The plugin only loads its assets on WooCommerce order and subscription admin
 6. Automatically add a note when an order changes status
 
 == Changelog ==
+
+= 1.1.6 =
+* Internal: code style suppressions rewritten so they survive the free build process
+
+= 1.1.5 =
+* Internal: premium feature code is now excluded from the free distribution rather than disabled within it
 
 = 1.1.4 =
 * Fixed: the Categories screen was squeezed into a narrow column, breaking category names across lines

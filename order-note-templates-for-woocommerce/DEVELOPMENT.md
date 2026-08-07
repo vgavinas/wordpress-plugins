@@ -2,7 +2,7 @@
 
 ## Plugin Info
 - **Slug:** order-note-templates-for-woocommerce
-- **Version:** 1.1.4
+- **Version:** 1.1.6
 - **GitHub:** https://github.com/vgavinas/wordpress-plugins
 - **WordPress.org:** submitted August 7, 2026 — awaiting review
 - **Freemius Product ID:** 36694
@@ -67,7 +67,7 @@ order-note-templates-for-woocommerce/
 
 ## Key Constants
 - `WC_ONT_FREE_LIMIT = 3` — max templates on free plan
-- `WC_ONT_VERSION = '1.1.4'`
+- `WC_ONT_VERSION = '1.1.6'`
 
 ## How to Test Pro Features
 1. Install plugin on WordPress site with WooCommerce
@@ -150,7 +150,49 @@ Also avoid `table-layout: fixed` (the `fixed` class on `wp-list-table`) on
 tables holding inline controls — declared widths win over content and the text
 column collapses.
 
+## Premium Code Separation — do not break this
+
+WordPress.org guideline 5 forbids shipping feature code in the free plugin and
+gating it behind a licence check. The premium implementation must be **absent**
+from the free build, not merely unreachable.
+
+Freemius strips by **filename**, so every Pro module lives in
+`includes/class-<name>__premium_only.php`. A `__premium_only` marker buried
+inside a function body is not enough — that was the 1.1.4 mistake, and the free
+build shipped the full Pro implementation.
+
+`WC_ONT_Admin_Page::load_pro_modules()` checks `file_exists()` then
+`class_exists()`, and every call site is guarded with `class_exists()`, so the
+plugin runs correctly whether or not the files are present.
+
+**After every deploy:** download the generated free build from Freemius and
+confirm the four `__premium_only` files are gone:
+
+```bash
+unzip -l <free-build>.zip | grep premium_only   # expect no output
+```
+
+`DEVELOPMENT.md` is excluded from the shipped archive but kept in the repo.
+
+## phpcs Suppressions
+
+Always put `// phpcs:ignore` on its **own line**, never trailing after code.
+The Freemius free-build processor rewrites the `fs_dynamic_init()` block and
+drops trailing comments, so trailing suppressions vanish from the free build
+and Plugin Check flags warnings that pass locally.
+
+Run Plugin Check against the **generated free build**, not the dev source —
+they differ.
+
 ## Changelog
+### 1.1.6
+- phpcs suppressions moved onto standalone lines so the free build keeps them
+
+### 1.1.5
+- Pro modules renamed to `__premium_only.php` so Freemius removes them from the free build
+- Pro loading and every call site guarded with `class_exists()`
+- DEVELOPMENT.md excluded from the distributed archive
+
 ### 1.1.4
 - Categories tab moved out of the two-column grid onto `.wc-ont-panel`
 - Category table switched to auto layout with a 180px minimum on the name column

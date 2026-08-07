@@ -9,16 +9,37 @@ class WC_ONT_Admin_Page {
         add_action( 'admin_post_wc_ont_delete_template', array( $this, 'handle_delete' ) );
         add_action( 'admin_enqueue_scripts',             array( $this, 'enqueue' ) );
 
-        // Pro features
+        /*
+         * Pro features live in files suffixed __premium_only, which the build
+         * process strips from the free distribution entirely. Load them
+         * defensively so the plugin behaves either way.
+         */
         if ( wc_ont_is_pro() ) {
-            require_once WC_ONT_DIR . 'includes/class-import-export.php';
-            new WC_ONT_Import_Export();
-            require_once WC_ONT_DIR . 'includes/class-categories.php';
-            new WC_ONT_Categories();
-            require_once WC_ONT_DIR . 'includes/class-auto-insert.php';
-            new WC_ONT_Auto_Insert();
-            require_once WC_ONT_DIR . 'includes/class-pdf-attachments.php';
-            new WC_ONT_PDF_Attachments();
+            $this->load_pro_modules();
+        }
+    }
+
+    /**
+     * Load the Pro modules when their files are present.
+     */
+    private function load_pro_modules() {
+        $modules = array(
+            'import-export'   => 'WC_ONT_Import_Export',
+            'categories'      => 'WC_ONT_Categories',
+            'auto-insert'     => 'WC_ONT_Auto_Insert',
+            'pdf-attachments' => 'WC_ONT_PDF_Attachments',
+        );
+
+        foreach ( $modules as $slug => $class ) {
+            $file = WC_ONT_DIR . 'includes/class-' . $slug . '__premium_only.php';
+
+            if ( ! class_exists( $class ) && file_exists( $file ) ) {
+                require_once $file;
+            }
+
+            if ( class_exists( $class ) ) {
+                new $class();
+            }
         }
     }
 
@@ -129,7 +150,9 @@ class WC_ONT_Admin_Page {
             if ( ! empty( $_POST['remove_pdf'] ) ) {
                 $data['pdf_attachment'] = '';
             } elseif ( ! empty( $_FILES['pdf_attachment']['name'] ) ) {
-                $pdf_url = WC_ONT_PDF_Attachments::handle_upload();
+                $pdf_url = class_exists( 'WC_ONT_PDF_Attachments' )
+                    ? WC_ONT_PDF_Attachments::handle_upload()
+                    : '';
                 if ( $pdf_url ) {
                     $data['pdf_attachment'] = $pdf_url;
                 }
@@ -274,21 +297,21 @@ class WC_ONT_Admin_Page {
                 </div>
             <?php endif; ?>
 
-            <?php if ( wc_ont_is_pro() && 'auto-insert' === $active_tab ) :
+            <?php if ( wc_ont_is_pro() && 'auto-insert' === $active_tab && class_exists( 'WC_ONT_Auto_Insert' ) ) :
                 $ai = new WC_ONT_Auto_Insert();
                 $ai->render_tab();
                 echo '</div>'; // .wrap
                 return;
             endif; ?>
 
-            <?php if ( wc_ont_is_pro() && 'import-export' === $active_tab ) :
+            <?php if ( wc_ont_is_pro() && 'import-export' === $active_tab && class_exists( 'WC_ONT_Import_Export' ) ) :
                 $ie = new WC_ONT_Import_Export();
                 $ie->render_tab();
                 echo '</div>'; // .wrap
                 return;
             endif; ?>
 
-            <?php if ( wc_ont_is_pro() && 'categories' === $active_tab ) :
+            <?php if ( wc_ont_is_pro() && 'categories' === $active_tab && class_exists( 'WC_ONT_Categories' ) ) :
                 $cats = new WC_ONT_Categories();
                 $cats->render_tab();
                 echo '</div>'; // .wrap
@@ -356,7 +379,7 @@ class WC_ONT_Admin_Page {
                             <tr>
                                 <th><label for="ont-category"><?php esc_html_e( 'Category', 'order-note-templates-for-woocommerce' ); ?></label></th>
                                 <td>
-                                    <?php $cats = WC_ONT_Categories::get_categories(); ?>
+                                    <?php $cats = class_exists( 'WC_ONT_Categories' ) ? WC_ONT_Categories::get_categories() : array(); ?>
                                     <input id="ont-category" type="text" name="category" class="regular-text"
                                            list="wc-ont-categories-list"
                                            value="<?php echo esc_attr( isset( $editing->category ) ? $editing->category : '' ); ?>"
@@ -376,7 +399,9 @@ class WC_ONT_Admin_Page {
                                            value="<?php echo absint( isset( $editing->sort_order ) ? $editing->sort_order : 0 ); ?>" min="0"></td>
                             </tr>
                             <?php if ( wc_ont_is_pro() ) :
-                                WC_ONT_PDF_Attachments::render_form_field( $editing ?: (object) array() );
+                                if ( class_exists( 'WC_ONT_PDF_Attachments' ) ) {
+                                    WC_ONT_PDF_Attachments::render_form_field( $editing ?: (object) array() );
+                                }
                             endif; ?>
                         </table>
 

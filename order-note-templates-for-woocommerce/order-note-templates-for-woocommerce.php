@@ -3,7 +3,7 @@
  * Plugin Name: Order Note Templates for WooCommerce
  * Plugin URI:  https://wordpress.org/plugins/order-note-templates-for-woocommerce/
  * Description: Save and reuse order note templates in WooCommerce admin. Works with HPOS and WooCommerce Subscriptions.
- * Version:     1.1.4
+ * Version:     1.1.6
  * Author:      Pro Technologies Limited
  * Author URI:  https://pro-webdesign.co.uk
  * Text Domain: order-note-templates-for-woocommerce
@@ -29,7 +29,7 @@ if ( function_exists( 'ontfw_fs' ) ) {
      */
     if ( ! function_exists( 'ontfw_fs' ) ) {
 
-        define( 'WC_ONT_VERSION', '1.1.4' );
+        define( 'WC_ONT_VERSION', '1.1.6' );
         define( 'WC_ONT_FILE',    __FILE__ );
         define( 'WC_ONT_DIR',     plugin_dir_path( __FILE__ ) );
         define( 'WC_ONT_URL',     plugin_dir_url( __FILE__ ) );
@@ -37,13 +37,16 @@ if ( function_exists( 'ontfw_fs' ) ) {
         /* -------------------------------------------------------------------------
          * Freemius SDK
          * ---------------------------------------------------------------------- */
-        function ontfw_fs() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
-            global $ontfw_fs; // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound -- name is fixed by the Freemius SDK.
+        function ontfw_fs() {
+            // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- name is fixed by the Freemius SDK.
+            global $ontfw_fs;
 
             if ( ! isset( $ontfw_fs ) ) {
                 require_once dirname( __FILE__ ) . '/vendor/freemius/start.php';
 
-                $ontfw_fs = fs_dynamic_init( array( // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
+                // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- name is fixed by the Freemius SDK.
+                $ontfw_fs = fs_dynamic_init( array(
                     'id'                  => '36694',
                     'slug'                => 'order-note-templates-for-woocommerce',
                     'type'                => 'plugin',
@@ -70,7 +73,8 @@ if ( function_exists( 'ontfw_fs' ) ) {
         }
 
         ontfw_fs();
-        do_action( 'ontfw_fs_loaded' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+        // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- hook name is fixed by the Freemius SDK.
+        do_action( 'ontfw_fs_loaded' );
 
         /* -------------------------------------------------------------------------
          * HPOS compatibility
@@ -167,7 +171,8 @@ if ( function_exists( 'ontfw_fs' ) ) {
             );
 
             foreach ( $defaults as $d ) {
-                $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+                // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- seeding a custom table on activation; no cache to prime.
+                $wpdb->insert(
                     $wpdb->prefix . 'order_note_templates',
                     array(
                         'title'      => $d[0],
