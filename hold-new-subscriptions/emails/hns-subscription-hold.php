@@ -29,8 +29,8 @@ do_action( 'woocommerce_email_header', isset( $email_heading ) ? $email_heading 
     printf(
         /* translators: 1: subscription ID, 2: order ID */
         esc_html__( 'Your subscription #%1$d has been placed on hold while we process your order #%2$d.', 'hold-new-subscriptions' ),
-        isset( $subscription ) ? $subscription->get_id() : 0,
-        isset( $order ) ? $order->get_id() : 0
+        isset( $subscription ) ? absint( $subscription->get_id() ) : 0,
+        isset( $order ) ? absint( $order->get_id() ) : 0
     );
 ?></p>
 

@@ -73,7 +73,10 @@ class HNS_Pro_Product_Rules {
 
         $statuses = function_exists( 'wc_get_order_statuses' ) ? array_keys( wc_get_order_statuses() ) : array();
 
-        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- verified above via check_admin_referer()
+        // Nonce verified above via check_admin_referer(). Every field of every row is
+        // individually validated/sanitized below (absint, sanitize_key + status whitelist)
+        // before it's used, so the raw unslash here is intentional.
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
         $raw_rules = isset( $_POST['hns_pro_rules'] ) ? wp_unslash( $_POST['hns_pro_rules'] ) : array();
         $rules     = array();
 

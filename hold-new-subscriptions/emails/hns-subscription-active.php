@@ -28,7 +28,7 @@ do_action( 'woocommerce_email_header', isset( $email_heading ) ? $email_heading 
     printf(
         /* translators: %d: subscription ID */
         esc_html__( 'Your subscription #%d has been activated.', 'hold-new-subscriptions' ),
-        isset( $subscription ) ? $subscription->get_id() : 0
+        isset( $subscription ) ? absint( $subscription->get_id() ) : 0
     );
 ?><br>
 <?php esc_html_e( 'Enjoy watching!', 'hold-new-subscriptions' ); ?><br>

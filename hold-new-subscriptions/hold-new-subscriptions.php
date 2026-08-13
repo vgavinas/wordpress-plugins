@@ -3,7 +3,7 @@
  * Plugin Name: Hold New Subscriptions Until Order Completed
  * Description: Puts newly created WooCommerce Subscriptions on hold (configurable) until the parent order reaches selected statuses (e.g. Completed), then activates them.
  * Author: Vitalijus Gavinas
- * Version: 1.3.0
+ * Version: 1.3.1
  * License: GPL-2.0-or-later
  * Text Domain: hold-new-subscriptions
  * Domain Path: /languages
@@ -16,7 +16,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'HNS_PLUGIN_VERSION', '1.3.0' );
+define( 'HNS_PLUGIN_VERSION', '1.3.1' );
 define( 'HNS_PLUGIN_FILE', __FILE__ );
 define( 'HNS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HNS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -255,6 +255,7 @@ function hns_activate_subscription( $sub, $order, $reason ) {
 
     $opts = hns_get_options();
     if ( ! empty( $opts['add_order_notes'] ) ) {
+        /* translators: %s: reason the subscription was activated */
         $sub->add_order_note( sprintf( __( 'HNS: subscription activated. %s', 'hold-new-subscriptions' ), $reason ) );
     }
     if ( ! empty( $opts['send_active_email'] ) && $order instanceof WC_Order ) {
@@ -375,6 +376,7 @@ function hns_boot() {
             remove_filter( $allow_filter, '__return_true', 100 );
 
             if ( ! empty( $opts['add_order_notes'] ) ) {
+                /* translators: 1: initial subscription status, 2: comma-separated order statuses that will trigger activation */
                 $sub->add_order_note( sprintf( __( 'HNS: subscription set to %1$s until parent order reaches: %2$s', 'hold-new-subscriptions' ), $target, implode( ', ', $activate_statuses ) ) );
             }
             if ( ! empty( $opts['send_hold_email'] ) ) {
@@ -445,7 +447,11 @@ function hns_boot() {
                 hns_activate_subscription(
                     $sub,
                     $order,
-                    sprintf( __( 'Activated when parent order reached target status "%s".', 'hold-new-subscriptions' ), (string) $new_status )
+                    sprintf(
+                        /* translators: %s: order status that triggered activation */
+                        __( 'Activated when parent order reached target status "%s".', 'hold-new-subscriptions' ),
+                        (string) $new_status
+                    )
                 );
             }
         }

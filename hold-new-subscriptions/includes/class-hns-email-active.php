@@ -109,6 +109,7 @@ class HNS_Email_Active extends WC_Email {
             'subject' => array(
                 'title'       => __( 'Subject', 'hold-new-subscriptions' ),
                 'type'        => 'text',
+                /* translators: %s: list of placeholder tags available in this field */
                 'description' => sprintf( __( 'Available placeholders: %s', 'hold-new-subscriptions' ), '<code>{subscription_id}, {order_id}</code>' ),
                 'placeholder' => $this->get_default_subject(),
                 'default'     => '',
@@ -117,6 +118,7 @@ class HNS_Email_Active extends WC_Email {
             'heading' => array(
                 'title'       => __( 'Email Heading', 'hold-new-subscriptions' ),
                 'type'        => 'text',
+                /* translators: %s: list of placeholder tags available in this field */
                 'description' => sprintf( __( 'Available placeholders: %s', 'hold-new-subscriptions' ), '<code>{subscription_id}, {order_id}</code>' ),
                 'placeholder' => $this->get_default_heading(),
                 'default'     => '',

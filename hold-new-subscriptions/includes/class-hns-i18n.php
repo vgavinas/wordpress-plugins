@@ -4,18 +4,13 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 class HNS_I18n {
 
     public static function init() {
-        // Called from within plugins_loaded, so we invoke directly instead of
-        // registering another plugins_loaded callback (which would never fire).
-        self::load_textdomain();
+        // No load_plugin_textdomain() call here: since WP 4.6, WordPress
+        // automatically loads translations for a plugin's own bundled .mo
+        // files based on the "Text Domain" / "Domain Path" headers alone
+        // (this also covers translations served from WordPress.org for
+        // plugins hosted there) — a manual call is redundant and discouraged.
+        // Same convention as Order Tags & Labels for WooCommerce.
         self::fallback_ru_ru();
-    }
-
-    public static function load_textdomain() {
-        load_plugin_textdomain(
-            'hold-new-subscriptions',
-            false,
-            dirname( plugin_basename( HNS_PLUGIN_FILE ) ) . '/languages'
-        );
     }
 
     /**

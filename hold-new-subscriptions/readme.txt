@@ -5,7 +5,7 @@ Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.2
 Requires Plugins: woocommerce
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,11 @@ The subscription activates as soon as the parent order reaches any one of the st
 1. Settings page under WooCommerce → Hold Subscriptions
 
 == Changelog ==
+
+= 1.3.1 =
+* Fixed: Plugin Check errors — missing translators comments on strings with placeholders, and unescaped subscription/order IDs in the email templates (now cast with `absint()`).
+* Fixed: Plugin Check warnings — removed the discouraged `load_plugin_textdomain()` call (WordPress auto-loads bundled translations from the Text Domain/Domain Path headers since 4.6), corrected two `phpcs:ignore` comments that weren't actually suppressing the lines they were meant to.
+* Internal: `DEVELOPMENT.md` is excluded from the distributed plugin zip.
 
 = 1.3.0 =
 * Internal: added extensibility hooks (`hns_subscription_options`, `hns_subscription_held`, `hns_subscription_activated`) and a shared activation helper. No behaviour change for this (free) build — these exist so optional Pro functionality can plug in later without touching this codebase.

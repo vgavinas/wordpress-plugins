@@ -168,13 +168,16 @@ class HNS_Pro_Escalation {
 
         // wc_get_orders()/WC_Order_Query resolves meta queries against the
         // correct storage (custom order tables under HPOS, postmeta otherwise),
-        // unlike a hand-written SQL query against wp_postmeta.
-        // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key, WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+        // unlike a hand-written SQL query against wp_postmeta. There's no indexed
+        // alternative for querying arbitrary custom meta via WC_Order_Query, and
+        // this only ever scans subscriptions currently on-hold/pending.
         $subs = wc_get_orders( array(
             'type'         => 'shop_subscription',
             'status'       => array( 'wc-on-hold', 'wc-pending' ),
             'limit'        => -1,
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
             'meta_key'     => '_hns_held_at',
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
             'meta_value'   => $cutoff,
             'meta_compare' => '<=',
             'meta_type'    => 'NUMERIC',

@@ -8,14 +8,16 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 echo "= " . esc_html( wp_strip_all_tags( isset( $email_heading ) ? $email_heading : '' ) ) . " =\n\n";
 
 printf(
+    /* translators: %s: customer first name */
     esc_html__( 'Hello %s,', 'hold-new-subscriptions' ),
     esc_html( wp_strip_all_tags( isset( $order ) ? $order->get_billing_first_name() : '' ) )
 );
 echo "\n\n";
 
 printf(
+    /* translators: %d: subscription ID */
     esc_html__( 'Your subscription #%d has been activated.', 'hold-new-subscriptions' ),
-    isset( $subscription ) ? $subscription->get_id() : 0
+    isset( $subscription ) ? absint( $subscription->get_id() ) : 0
 );
 echo "\n";
 esc_html_e( 'Enjoy watching!', 'hold-new-subscriptions' );

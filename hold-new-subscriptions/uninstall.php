@@ -33,7 +33,9 @@ function hns_uninstall_cleanup_site() {
     if ( $hpos_enabled ) {
         $table = $wpdb->prefix . 'wc_orders_meta';
         foreach ( $meta_keys as $meta_key ) {
-            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            // 'meta_key' here is a literal column name for $wpdb->delete()'s WHERE
+            // clause, not a WP_Query/WC_Order_Query meta_key argument.
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.SlowDBQuery.slow_db_query_meta_key
             $wpdb->delete( $table, array( 'meta_key' => $meta_key ) );
         }
     } else {
