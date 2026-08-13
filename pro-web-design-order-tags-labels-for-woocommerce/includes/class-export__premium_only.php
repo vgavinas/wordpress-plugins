@@ -45,8 +45,8 @@ class WC_OTL_Export {
 	public function register_menu() {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Export Tagged Orders', 'order-tags-labels-for-woocommerce' ),
-			__( 'Export Tagged Orders', 'order-tags-labels-for-woocommerce' ),
+			__( 'Export Tagged Orders', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			__( 'Export Tagged Orders', 'pro-web-design-order-tags-labels-for-woocommerce' ),
 			'manage_woocommerce',
 			'wc-order-tags-export',
 			array( $this, 'render_export_page' )
@@ -64,10 +64,10 @@ class WC_OTL_Export {
 		$tags = WC_OTL_Tags::get_all_tags();
 		?>
 		<div class="wrap wc-otl-wrap">
-			<h1><?php esc_html_e( 'Export Tagged Orders', 'order-tags-labels-for-woocommerce' ); ?></h1>
+			<h1><?php esc_html_e( 'Export Tagged Orders', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></h1>
 
 			<?php if ( isset( $_GET['error'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-				<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Please choose a tag to export.', 'order-tags-labels-for-woocommerce' ); ?></p></div>
+				<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Please choose a tag to export.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></p></div>
 			<?php endif; ?>
 
 			<?php if ( empty( $tags ) ) : ?>
@@ -75,7 +75,7 @@ class WC_OTL_Export {
 					<?php
 					printf(
 						/* translators: %s: URL to the tag management screen. */
-						wp_kses_post( __( 'Create a tag first under <a href="%s">Order Tags</a> before exporting.', 'order-tags-labels-for-woocommerce' ) ),
+						wp_kses_post( __( 'Create a tag first under <a href="%s">Order Tags</a> before exporting.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ),
 						esc_url( admin_url( 'admin.php?page=wc-order-tags' ) )
 					);
 					?>
@@ -86,10 +86,10 @@ class WC_OTL_Export {
 					<?php wp_nonce_field( 'wc_otl_export_csv' ); ?>
 					<table class="form-table">
 						<tr>
-							<th><label for="wc-otl-export-tag"><?php esc_html_e( 'Tag', 'order-tags-labels-for-woocommerce' ); ?></label></th>
+							<th><label for="wc-otl-export-tag"><?php esc_html_e( 'Tag', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></label></th>
 							<td>
 								<select name="tag_id" id="wc-otl-export-tag" required>
-									<option value=""><?php esc_html_e( '— Select a tag —', 'order-tags-labels-for-woocommerce' ); ?></option>
+									<option value=""><?php esc_html_e( '— Select a tag —', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></option>
 									<?php foreach ( $tags as $tag ) : ?>
 										<option value="<?php echo esc_attr( $tag['id'] ); ?>"><?php echo esc_html( $tag['name'] ); ?></option>
 									<?php endforeach; ?>
@@ -98,7 +98,7 @@ class WC_OTL_Export {
 						</tr>
 					</table>
 					<p>
-						<button type="submit" class="button button-primary"><?php esc_html_e( 'Download CSV', 'order-tags-labels-for-woocommerce' ); ?></button>
+						<button type="submit" class="button button-primary"><?php esc_html_e( 'Download CSV', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></button>
 					</p>
 				</form>
 			<?php endif; ?>
@@ -129,7 +129,7 @@ class WC_OTL_Export {
 	 */
 	public function handle_export() {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_die( esc_html__( 'You are not allowed to do this.', 'order-tags-labels-for-woocommerce' ) );
+			wp_die( esc_html__( 'You are not allowed to do this.', 'pro-web-design-order-tags-labels-for-woocommerce' ) );
 		}
 		check_admin_referer( 'wc_otl_export_csv' );
 

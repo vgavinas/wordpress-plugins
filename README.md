@@ -17,7 +17,7 @@ Save and reuse order note templates in WooCommerce admin. Full HPOS and WooComme
 
 **WordPress.org:** https://wordpress.org/plugins/pro-web-design-order-note-templates-for-woocommerce/
 
-### [Order Tags & Labels for WooCommerce](./order-tags-labels-for-woocommerce/)
+### [Pro Web Design Order Tags & Labels for WooCommerce](./pro-web-design-order-tags-labels-for-woocommerce/)
 Organize WooCommerce orders with color-coded tags. Assign manually or automatically, filter and bulk-manage tagged orders.
 
 **Features:**

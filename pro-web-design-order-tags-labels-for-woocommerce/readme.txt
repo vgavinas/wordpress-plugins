@@ -1,10 +1,10 @@
-=== Order Tags & Labels for WooCommerce ===
+=== Pro Web Design Order Tags & Labels for WooCommerce ===
 Contributors: protechnologies, prowebdeignuk, freemius
 Tags: woocommerce, order tags, order labels, order management, admin
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.2
+Stable tag: 1.1.3
 Requires Plugins: woocommerce
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,7 @@ Organize WooCommerce orders with color-coded tags. Assign manually or automatica
 
 == Description ==
 
-**Order Tags & Labels for WooCommerce** brings a simple, visual organization layer to your WooCommerce order screens. Instead of hunting through notes or statuses, tag orders with color-coded labels like "Urgent", "VIP", or "Follow Up" so your team can spot what matters at a glance.
+**Pro Web Design Order Tags & Labels for WooCommerce** brings a simple, visual organization layer to your WooCommerce order screens. Instead of hunting through notes or statuses, tag orders with color-coded labels like "Urgent", "VIP", or "Follow Up" so your team can spot what matters at a glance.
 
 = Free Features =
 
@@ -39,7 +39,7 @@ If you like keeping your order admin tidy, check out our other plugin, [Pro Web 
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/order-tags-labels-for-woocommerce`, or install directly through the WordPress plugins screen.
+1. Upload the plugin files to `/wp-content/plugins/pro-web-design-order-tags-labels-for-woocommerce/`, or install directly through the WordPress plugins screen.
 2. Activate the plugin through the "Plugins" screen in WordPress.
 3. Go to **WooCommerce → Order Tags** to create your first tags.
 4. Open any order to assign tags from the "Order Tags" box in the sidebar.
@@ -70,6 +70,9 @@ Filtering and bulk tag actions are Professional features.
 4. Auto-tag rules (Professional).
 
 == Changelog ==
+
+= 1.1.3 =
+* Changed: renamed the plugin to "Pro Web Design Order Tags & Labels for WooCommerce" ahead of WordPress.org submission, to avoid a naming clash with an existing directory listing
 
 = 1.1.2 =
 * Fixed: the "filter Orders list by tag" dropdown and its query logic were still present in the free version's shared code, only inert behind a Professional check — moved entirely into a Professional-only module (excluded from the free build), matching how the other Professional modules are already handled

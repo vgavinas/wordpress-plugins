@@ -57,8 +57,8 @@ class WC_OTL_Auto_Tag_Rules {
 	public function register_menu() {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Auto-Tag Rules', 'order-tags-labels-for-woocommerce' ),
-			__( 'Auto-Tag Rules', 'order-tags-labels-for-woocommerce' ),
+			__( 'Auto-Tag Rules', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			__( 'Auto-Tag Rules', 'pro-web-design-order-tags-labels-for-woocommerce' ),
 			'manage_woocommerce',
 			'wc-order-tag-rules',
 			array( $this, 'render_rules_page' )
@@ -213,7 +213,7 @@ class WC_OTL_Auto_Tag_Rules {
 	 */
 	public function handle_save_rule() {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_die( esc_html__( 'You are not allowed to do this.', 'order-tags-labels-for-woocommerce' ) );
+			wp_die( esc_html__( 'You are not allowed to do this.', 'pro-web-design-order-tags-labels-for-woocommerce' ) );
 		}
 		check_admin_referer( 'wc_otl_save_rule' );
 
@@ -258,7 +258,7 @@ class WC_OTL_Auto_Tag_Rules {
 	 */
 	public function handle_delete_rule() {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_die( esc_html__( 'You are not allowed to do this.', 'order-tags-labels-for-woocommerce' ) );
+			wp_die( esc_html__( 'You are not allowed to do this.', 'pro-web-design-order-tags-labels-for-woocommerce' ) );
 		}
 		check_admin_referer( 'wc_otl_delete_rule' );
 
@@ -300,14 +300,14 @@ class WC_OTL_Auto_Tag_Rules {
 		$tags  = WC_OTL_Tags::get_all_tags();
 
 		$fields = array(
-			'order_total'     => __( 'Order total', 'order-tags-labels-for-woocommerce' ),
-			'payment_method'  => __( 'Payment method', 'order-tags-labels-for-woocommerce' ),
-			'shipping_method' => __( 'Shipping method', 'order-tags-labels-for-woocommerce' ),
-			'product_id'      => __( 'Contains product ID', 'order-tags-labels-for-woocommerce' ),
-			'customer_role'   => __( 'Customer role', 'order-tags-labels-for-woocommerce' ),
-			'customer_type'   => __( 'Customer type (new/returning)', 'order-tags-labels-for-woocommerce' ),
-			'order_status'    => __( 'Order status', 'order-tags-labels-for-woocommerce' ),
-			'is_subscription' => __( 'Is a subscription order', 'order-tags-labels-for-woocommerce' ),
+			'order_total'     => __( 'Order total', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			'payment_method'  => __( 'Payment method', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			'shipping_method' => __( 'Shipping method', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			'product_id'      => __( 'Contains product ID', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			'customer_role'   => __( 'Customer role', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			'customer_type'   => __( 'Customer type (new/returning)', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			'order_status'    => __( 'Order status', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			'is_subscription' => __( 'Is a subscription order', 'pro-web-design-order-tags-labels-for-woocommerce' ),
 		);
 
 		// Fields with a fixed, enumerable set of values get a <select> instead of free text —
@@ -330,28 +330,28 @@ class WC_OTL_Auto_Tag_Rules {
 		}
 		?>
 		<div class="wrap wc-otl-wrap">
-			<h1><?php esc_html_e( 'Auto-Tag Rules', 'order-tags-labels-for-woocommerce' ); ?></h1>
-			<p class="description"><?php esc_html_e( 'Automatically tag orders when they are created or change status.', 'order-tags-labels-for-woocommerce' ); ?></p>
+			<h1><?php esc_html_e( 'Auto-Tag Rules', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></h1>
+			<p class="description"><?php esc_html_e( 'Automatically tag orders when they are created or change status.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></p>
 
 			<?php if ( isset( $_GET['created'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Rule added.', 'order-tags-labels-for-woocommerce' ); ?></p></div>
+				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Rule added.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></p></div>
 			<?php elseif ( isset( $_GET['deleted'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Rule deleted.', 'order-tags-labels-for-woocommerce' ); ?></p></div>
+				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Rule deleted.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></p></div>
 			<?php elseif ( isset( $_GET['error'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-				<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Please choose a tag, a condition and a value before adding the rule.', 'order-tags-labels-for-woocommerce' ); ?></p></div>
+				<div class="notice notice-error is-dismissible"><p><?php esc_html_e( 'Please choose a tag, a condition and a value before adding the rule.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></p></div>
 			<?php endif; ?>
 
 			<table class="widefat striped wc-otl-tags-table">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Tag', 'order-tags-labels-for-woocommerce' ); ?></th>
-						<th><?php esc_html_e( 'Condition', 'order-tags-labels-for-woocommerce' ); ?></th>
-						<th style="width:120px"><?php esc_html_e( 'Actions', 'order-tags-labels-for-woocommerce' ); ?></th>
+						<th><?php esc_html_e( 'Tag', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></th>
+						<th><?php esc_html_e( 'Condition', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></th>
+						<th style="width:120px"><?php esc_html_e( 'Actions', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php if ( empty( $rules ) ) : ?>
-						<tr><td colspan="3"><?php esc_html_e( 'No rules yet.', 'order-tags-labels-for-woocommerce' ); ?></td></tr>
+						<tr><td colspan="3"><?php esc_html_e( 'No rules yet.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></td></tr>
 					<?php endif; ?>
 					<?php foreach ( $rules as $rule ) : ?>
 						<?php $condition = json_decode( $rule['condition_json'], true ); ?>
@@ -372,9 +372,9 @@ class WC_OTL_Auto_Tag_Rules {
 								<a
 									class="button"
 									href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=wc_otl_delete_rule&rule_id=' . $rule['id'] ), 'wc_otl_delete_rule' ) ); ?>"
-									onclick="return confirm('<?php echo esc_js( __( 'Delete this rule?', 'order-tags-labels-for-woocommerce' ) ); ?>');"
+									onclick="return confirm('<?php echo esc_js( __( 'Delete this rule?', 'pro-web-design-order-tags-labels-for-woocommerce' ) ); ?>');"
 								>
-									<?php esc_html_e( 'Delete', 'order-tags-labels-for-woocommerce' ); ?>
+									<?php esc_html_e( 'Delete', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?>
 								</a>
 							</td>
 						</tr>
@@ -382,14 +382,14 @@ class WC_OTL_Auto_Tag_Rules {
 				</tbody>
 			</table>
 
-			<h2><?php esc_html_e( 'Add a Rule', 'order-tags-labels-for-woocommerce' ); ?></h2>
+			<h2><?php esc_html_e( 'Add a Rule', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></h2>
 
 			<?php if ( empty( $tags ) ) : ?>
 				<p>
 					<?php
 					printf(
 						/* translators: %s: URL to the tag management screen. */
-						wp_kses_post( __( 'Create a tag first under <a href="%s">Order Tags</a> before adding automation rules.', 'order-tags-labels-for-woocommerce' ) ),
+						wp_kses_post( __( 'Create a tag first under <a href="%s">Order Tags</a> before adding automation rules.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ),
 						esc_url( admin_url( 'admin.php?page=wc-order-tags' ) )
 					);
 					?>
@@ -400,7 +400,7 @@ class WC_OTL_Auto_Tag_Rules {
 				<?php wp_nonce_field( 'wc_otl_save_rule' ); ?>
 				<table class="form-table">
 					<tr>
-						<th><label for="wc-otl-rule-tag"><?php esc_html_e( 'Apply Tag', 'order-tags-labels-for-woocommerce' ); ?></label></th>
+						<th><label for="wc-otl-rule-tag"><?php esc_html_e( 'Apply Tag', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></label></th>
 						<td>
 							<select name="tag_id" id="wc-otl-rule-tag" required>
 								<?php foreach ( $tags as $tag ) : ?>
@@ -410,7 +410,7 @@ class WC_OTL_Auto_Tag_Rules {
 						</td>
 					</tr>
 					<tr>
-						<th><label for="wc-otl-rule-field"><?php esc_html_e( 'When', 'order-tags-labels-for-woocommerce' ); ?></label></th>
+						<th><label for="wc-otl-rule-field"><?php esc_html_e( 'When', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></label></th>
 						<td>
 							<select name="field" id="wc-otl-rule-field">
 								<?php foreach ( $fields as $key => $label ) : ?>
@@ -424,7 +424,7 @@ class WC_OTL_Auto_Tag_Rules {
 								<option value="<=">&lt;=</option>
 								<option value="==">=</option>
 								<option value="!=">&ne;</option>
-								<option value="contains"><?php esc_html_e( 'contains', 'order-tags-labels-for-woocommerce' ); ?></option>
+								<option value="contains"><?php esc_html_e( 'contains', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></option>
 							</select>
 
 							<span class="wc-otl-value-wrap">
@@ -432,7 +432,7 @@ class WC_OTL_Auto_Tag_Rules {
 									type="text"
 									name="value"
 									class="wc-otl-value-input wc-otl-value-default"
-									placeholder="<?php esc_attr_e( 'value', 'order-tags-labels-for-woocommerce' ); ?>"
+									placeholder="<?php esc_attr_e( 'value', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?>"
 								/>
 								<select class="wc-otl-value-input wc-otl-value-for-order_status" data-for-field="order_status" style="display:none">
 									<?php foreach ( $order_statuses as $status_key => $status_label ) : ?>
@@ -455,22 +455,22 @@ class WC_OTL_Auto_Tag_Rules {
 									<?php endforeach; ?>
 								</select>
 								<select class="wc-otl-value-input wc-otl-value-for-customer_type" data-for-field="customer_type" style="display:none">
-									<option value="new"><?php esc_html_e( 'New customer', 'order-tags-labels-for-woocommerce' ); ?></option>
-									<option value="returning"><?php esc_html_e( 'Returning customer', 'order-tags-labels-for-woocommerce' ); ?></option>
+									<option value="new"><?php esc_html_e( 'New customer', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></option>
+									<option value="returning"><?php esc_html_e( 'Returning customer', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></option>
 								</select>
 								<select class="wc-otl-value-input wc-otl-value-for-is_subscription" data-for-field="is_subscription" style="display:none">
-									<option value="1"><?php esc_html_e( 'Yes', 'order-tags-labels-for-woocommerce' ); ?></option>
-									<option value="0"><?php esc_html_e( 'No', 'order-tags-labels-for-woocommerce' ); ?></option>
+									<option value="1"><?php esc_html_e( 'Yes', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></option>
+									<option value="0"><?php esc_html_e( 'No', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></option>
 								</select>
 							</span>
 							<p class="description">
-								<?php esc_html_e( 'Order total: a number (e.g. 100). Payment/shipping method: the gateway or method ID (e.g. bacs, flat_rate). Contains product ID: a numeric product ID.', 'order-tags-labels-for-woocommerce' ); ?>
+								<?php esc_html_e( 'Order total: a number (e.g. 100). Payment/shipping method: the gateway or method ID (e.g. bacs, flat_rate). Contains product ID: a numeric product ID.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?>
 							</p>
 						</td>
 					</tr>
 				</table>
 				<p>
-					<button type="submit" class="button button-primary"><?php esc_html_e( 'Add Rule', 'order-tags-labels-for-woocommerce' ); ?></button>
+					<button type="submit" class="button button-primary"><?php esc_html_e( 'Add Rule', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></button>
 				</p>
 			</form>
 			<?php endif; ?>
