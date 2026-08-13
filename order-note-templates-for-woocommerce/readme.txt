@@ -1,10 +1,11 @@
-=== Order Note Templates for WooCommerce ===
-Contributors: protechnologies
+=== Pro Web Design Order Note Templates for WooCommerce ===
+Contributors: protechnologies, prowebdeignuk, freemius
 Tags: woocommerce, order notes, templates, subscriptions, hpos
 Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.6
+Requires Plugins: woocommerce
+Stable tag: 1.2.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,11 +13,11 @@ Save and reuse order note templates in WooCommerce admin. Works with HPOS and Wo
 
 == Description ==
 
-**WooCommerce Order Note Templates** lets you create reusable note templates and insert them into WooCommerce orders and subscriptions with a single click — no more typing the same messages over and over.
+**Pro Web Design Order Note Templates for WooCommerce** lets you create reusable note templates and insert them into WooCommerce orders and subscriptions with a single click — no more typing the same messages over and over.
 
 = Key Features =
 
-* 📝 **Save unlimited templates** — create customer-facing and internal note templates
+* 📝 **Unlimited templates, even on the free plan** — create as many customer-facing and internal note templates as you need
 * ⚡ **One-click insert** — select a template from a dropdown and insert it instantly
 * 🔄 **Smart variables** — automatically fills in order/subscription details:
   * `{order_id}` — order number
@@ -41,9 +42,9 @@ This plugin is fully compatible with WooCommerce's High-Performance Order Storag
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/wc-order-note-templates/`
+1. Upload the plugin files to `/wp-content/plugins/pro-web-design-order-note-templates-for-woocommerce/`, or install directly through the WordPress plugins screen
 2. Activate the plugin through the **Plugins** menu in WordPress
-3. Go to **WooCommerce → Шаблоны примечаний** to create your first template
+3. Go to **WooCommerce → Order Note Templates** to create your first template
 4. Open any order or subscription — the template selector appears in the sidebar
 
 == Frequently Asked Questions ==
@@ -78,6 +79,24 @@ No. The plugin only loads its assets on WooCommerce order and subscription admin
 6. Automatically add a note when an order changes status
 
 == Changelog ==
+
+= 1.2.3 =
+* Fixed: template category handling (the field, its save logic and the DB-column check) was still present in the free version's shared code, only inert — moved entirely into the Professional-only module so it is physically absent from the free build, matching how PDF attachments are already handled
+* Fixed: the free version's database table no longer creates the Pro-only `category`/`pdf_attachment` columns at all — they are added only when the Professional build runs, and on upgrade to Pro they are added automatically without touching existing data
+* Internal: PDF attachment save-handling gate now also keyed off the Professional-only class instead of a runtime license flag, for consistency
+* Fixed: readme Installation section pointed at a stale, incorrect folder name and had leftover untranslated text in the menu path
+
+= 1.2.2 =
+* Fixed: WooCommerce Subscriptions screen support is no longer restricted to the Pro plan — the free version now shows the template selector and all order/subscription variables on subscription screens too
+* Fixed: internal Freemius integration function/variable/hook renamed to use the plugin's own prefix, avoiding possible naming conflicts with other plugins
+
+= 1.2.1 =
+* Fixed: text domain in the Professional-only modules (categories, import/export, auto-insert, PDF attachments) updated to match the renamed plugin
+
+= 1.2.0 =
+* Changed: removed the 3-template cap on the free plan — the free version now supports unlimited templates
+* Changed: renamed the plugin to "Pro Web Design Order Note Templates for WooCommerce"
+* Added: `Requires Plugins: woocommerce` header
 
 = 1.1.6 =
 * Internal: code style suppressions rewritten so they survive the free build process

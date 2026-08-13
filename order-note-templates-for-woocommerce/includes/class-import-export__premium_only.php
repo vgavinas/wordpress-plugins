@@ -135,10 +135,10 @@ class WC_ONT_Import_Export {
         $import_count = isset( $_GET['import_count'] ) ? absint( $_GET['import_count'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
         $messages = array(
-            'success'    => sprintf( /* translators: %d: number of imported templates */ __( '✅ Successfully imported %d templates.', 'order-note-templates-for-woocommerce' ), $import_count ),
-            'no_file'    => __( '❌ No file selected.', 'order-note-templates-for-woocommerce' ),
-            'read_error' => __( '❌ Could not read file.', 'order-note-templates-for-woocommerce' ),
-            'invalid'    => __( '❌ Invalid JSON file. Please upload a valid export file.', 'order-note-templates-for-woocommerce' ),
+            'success'    => sprintf( /* translators: %d: number of imported templates */ __( '✅ Successfully imported %d templates.', 'pro-web-design-order-note-templates-for-woocommerce' ), $import_count ),
+            'no_file'    => __( '❌ No file selected.', 'pro-web-design-order-note-templates-for-woocommerce' ),
+            'read_error' => __( '❌ Could not read file.', 'pro-web-design-order-note-templates-for-woocommerce' ),
+            'invalid'    => __( '❌ Invalid JSON file. Please upload a valid export file.', 'pro-web-design-order-note-templates-for-woocommerce' ),
         );
 
         if ( $import_msg && isset( $messages[ $import_msg ] ) ) {
@@ -151,40 +151,40 @@ class WC_ONT_Import_Export {
 
             <!-- Export -->
             <div class="wc-ont-form-card">
-                <h2>📤 <?php esc_html_e( 'Export Templates', 'order-note-templates-for-woocommerce' ); ?></h2>
-                <p><?php esc_html_e( 'Download all your templates as a JSON file. Use this to back up your templates or transfer them to another site.', 'order-note-templates-for-woocommerce' ); ?></p>
+                <h2>📤 <?php esc_html_e( 'Export Templates', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></h2>
+                <p><?php esc_html_e( 'Download all your templates as a JSON file. Use this to back up your templates or transfer them to another site.', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></p>
                 <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                     <?php wp_nonce_field( 'wc_ont_export' ); ?>
                     <input type="hidden" name="action" value="wc_ont_export">
                     <button type="submit" class="button button-primary">
-                        📥 <?php esc_html_e( 'Download Export File', 'order-note-templates-for-woocommerce' ); ?>
+                        📥 <?php esc_html_e( 'Download Export File', 'pro-web-design-order-note-templates-for-woocommerce' ); ?>
                     </button>
                 </form>
             </div>
 
             <!-- Import -->
             <div class="wc-ont-form-card">
-                <h2>📥 <?php esc_html_e( 'Import Templates', 'order-note-templates-for-woocommerce' ); ?></h2>
-                <p><?php esc_html_e( 'Upload a JSON export file to import templates. Choose whether to add to existing templates or replace them.', 'order-note-templates-for-woocommerce' ); ?></p>
+                <h2>📥 <?php esc_html_e( 'Import Templates', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></h2>
+                <p><?php esc_html_e( 'Upload a JSON export file to import templates. Choose whether to add to existing templates or replace them.', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></p>
                 <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" enctype="multipart/form-data">
                     <?php wp_nonce_field( 'wc_ont_import' ); ?>
                     <input type="hidden" name="action" value="wc_ont_import">
 
                     <table class="form-table" role="presentation">
                         <tr>
-                            <th><label for="import_file"><?php esc_html_e( 'JSON File', 'order-note-templates-for-woocommerce' ); ?></label></th>
+                            <th><label for="import_file"><?php esc_html_e( 'JSON File', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></label></th>
                             <td><input type="file" id="import_file" name="import_file" accept=".json" required></td>
                         </tr>
                         <tr>
-                            <th><?php esc_html_e( 'Import Mode', 'order-note-templates-for-woocommerce' ); ?></th>
+                            <th><?php esc_html_e( 'Import Mode', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></th>
                             <td>
                                 <label>
                                     <input type="radio" name="import_mode" value="add" checked>
-                                    <?php esc_html_e( 'Add to existing templates', 'order-note-templates-for-woocommerce' ); ?>
+                                    <?php esc_html_e( 'Add to existing templates', 'pro-web-design-order-note-templates-for-woocommerce' ); ?>
                                 </label><br>
                                 <label>
                                     <input type="radio" name="import_mode" value="replace">
-                                    <strong style="color:#b91c1c"><?php esc_html_e( 'Replace all templates (deletes existing!)', 'order-note-templates-for-woocommerce' ); ?></strong>
+                                    <strong style="color:#b91c1c"><?php esc_html_e( 'Replace all templates (deletes existing!)', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></strong>
                                 </label>
                             </td>
                         </tr>
@@ -192,8 +192,8 @@ class WC_ONT_Import_Export {
 
                     <p class="submit">
                         <button type="submit" class="button button-primary"
-                                onclick="return confirm('<?php esc_attr_e( 'Import templates? This cannot be undone if replacing.', 'order-note-templates-for-woocommerce' ); ?>')">
-                            📤 <?php esc_html_e( 'Import Templates', 'order-note-templates-for-woocommerce' ); ?>
+                                onclick="return confirm('<?php esc_attr_e( 'Import templates? This cannot be undone if replacing.', 'pro-web-design-order-note-templates-for-woocommerce' ); ?>')">
+                            📤 <?php esc_html_e( 'Import Templates', 'pro-web-design-order-note-templates-for-woocommerce' ); ?>
                         </button>
                     </p>
                 </form>

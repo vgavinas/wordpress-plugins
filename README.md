@@ -15,7 +15,20 @@ Save and reuse order note templates in WooCommerce admin. Full HPOS and WooComme
 - WooCommerce Subscriptions compatible
 - Customer and private note types
 
-**WordPress.org:** https://wordpress.org/plugins/order-note-templates-for-woocommerce/
+**WordPress.org:** https://wordpress.org/plugins/pro-web-design-order-note-templates-for-woocommerce/
+
+### [Order Tags & Labels for WooCommerce](./order-tags-labels-for-woocommerce/)
+Organize WooCommerce orders with color-coded tags. Assign manually or automatically, filter and bulk-manage tagged orders.
+
+**Features:**
+- Unlimited custom tags with your own colors
+- Assign or remove tags directly from the order edit screen
+- Tags column on the WooCommerce Orders list
+- Auto-tag rules based on order total, payment method, shipping method, products, customer role, and more
+- Filter and bulk add/remove tags from the Orders list, CSV export
+- Full HPOS support and WooCommerce Subscriptions compatible
+
+**Distribution:** Freemius only (not yet submitted to WordPress.org).
 
 ## License
 

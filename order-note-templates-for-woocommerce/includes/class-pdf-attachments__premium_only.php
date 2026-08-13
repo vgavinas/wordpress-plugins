@@ -122,7 +122,7 @@ class WC_ONT_PDF_Attachments {
         if ( isset( $note_data['comment_content'] ) ) {
             $note_data['comment_content'] .= "\n\n" . sprintf(
                 /* translators: %s: URL of the attached PDF */
-                __( 'Attached PDF: %s', 'order-note-templates-for-woocommerce' ),
+                __( 'Attached PDF: %s', 'pro-web-design-order-note-templates-for-woocommerce' ),
                 $pdf_url
             );
         }
@@ -219,7 +219,7 @@ class WC_ONT_PDF_Attachments {
         $current_pdf = isset( $template->pdf_attachment ) ? $template->pdf_attachment : '';
         ?>
         <tr>
-            <th><label for="pdf_attachment"><?php esc_html_e( 'PDF Attachment', 'order-note-templates-for-woocommerce' ); ?></label></th>
+            <th><label for="pdf_attachment"><?php esc_html_e( 'PDF Attachment', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></label></th>
             <td>
                 <?php if ( $current_pdf ) : ?>
                     <p>
@@ -229,13 +229,13 @@ class WC_ONT_PDF_Attachments {
                         &nbsp;
                         <label>
                             <input type="checkbox" name="remove_pdf" value="1">
-                            <?php esc_html_e( 'Remove', 'order-note-templates-for-woocommerce' ); ?>
+                            <?php esc_html_e( 'Remove', 'pro-web-design-order-note-templates-for-woocommerce' ); ?>
                         </label>
                     </p>
                 <?php endif; ?>
                 <input type="file" id="pdf_attachment" name="pdf_attachment" accept="application/pdf">
                 <p class="description">
-                    <?php esc_html_e( 'Attached to the customer email when a note is added from this template.', 'order-note-templates-for-woocommerce' ); ?>
+                    <?php esc_html_e( 'Attached to the customer email when a note is added from this template.', 'pro-web-design-order-note-templates-for-woocommerce' ); ?>
                 </p>
             </td>
         </tr>

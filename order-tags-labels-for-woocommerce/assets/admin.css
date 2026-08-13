@@ -1,0 +1,111 @@
+/**
+ * Order Tags & Labels for WooCommerce — admin styles.
+ */
+
+.wc-otl-pill {
+	display: inline-block;
+	padding: 2px 10px;
+	border-radius: 999px;
+	color: #fff;
+	font-size: 12px;
+	line-height: 1.8;
+	font-weight: 600;
+	white-space: nowrap;
+	text-shadow: 0 1px 1px rgba(0, 0, 0, 0.15);
+}
+
+.wc-otl-pill-small {
+	font-size: 11px;
+	padding: 1px 8px;
+	line-height: 1.6;
+	margin: 0 4px 4px 0;
+}
+
+/* Tag management screen */
+.wc-otl-wrap .wc-otl-tags-table {
+	margin-top: 16px;
+	width: 60%;
+	min-width: 620px;
+	max-width: 1000px;
+}
+
+.wc-otl-tags-table th,
+.wc-otl-tags-table td {
+	padding: 12px 14px;
+}
+
+.wc-otl-tags-table td {
+	vertical-align: middle;
+}
+
+.wc-otl-drag-handle {
+	cursor: move;
+	color: #999;
+	text-align: center;
+}
+
+.wc-otl-editing .wc-otl-edit-name-input {
+	width: 100%;
+	max-width: 220px;
+}
+
+.wc-otl-col-actions {
+	white-space: nowrap;
+}
+
+.wc-otl-col-actions .button {
+	margin-right: 6px;
+}
+
+.wc-otl-col-actions .button:last-child {
+	margin-right: 0;
+}
+
+.wc-otl-limit-notice p {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+/* Order edit screen meta box */
+.wc-otl-meta-box {
+	position: relative;
+}
+
+.wc-otl-tag-checklist {
+	margin: 0 0 10px;
+	max-height: 220px;
+	overflow-y: auto;
+}
+
+.wc-otl-tag-checklist li {
+	margin-bottom: 8px;
+}
+
+.wc-otl-tag-checklist label {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	cursor: pointer;
+}
+
+.wc-otl-meta-box-footer {
+	border-top: 1px solid #eee;
+	padding-top: 8px;
+	margin-top: 8px;
+}
+
+.wc-otl-spinner {
+	float: none;
+	visibility: hidden;
+}
+
+.wc-otl-spinner.is-active {
+	visibility: visible;
+}
+
+/* Orders list column */
+.column-order_tags {
+	width: 160px;
+}

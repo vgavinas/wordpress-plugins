@@ -134,13 +134,13 @@ class WC_ONT_Auto_Insert {
         $templates = $wpdb->get_results( "SELECT id, title, note_type FROM {$table} ORDER BY note_type, sort_order, title" );
 
         if ( $saved ) {
-            echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( '✅ Auto-insert rules saved.', 'order-note-templates-for-woocommerce' ) . '</p></div>';
+            echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( '✅ Auto-insert rules saved.', 'pro-web-design-order-note-templates-for-woocommerce' ) . '</p></div>';
         }
         ?>
         <div class="wc-ont-panel">
             <div class="wc-ont-form-card">
-            <h2>⚡ <?php esc_html_e( 'Auto-insert on Status Change', 'order-note-templates-for-woocommerce' ); ?></h2>
-            <p><?php esc_html_e( 'Automatically add a note to an order when it moves to a specific status. Add as many rules as you need.', 'order-note-templates-for-woocommerce' ); ?></p>
+            <h2>⚡ <?php esc_html_e( 'Auto-insert on Status Change', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></h2>
+            <p><?php esc_html_e( 'Automatically add a note to an order when it moves to a specific status. Add as many rules as you need.', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></p>
 
             <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                 <?php wp_nonce_field( 'wc_ont_save_auto_rules' ); ?>
@@ -149,9 +149,9 @@ class WC_ONT_Auto_Insert {
                 <table class="wp-list-table widefat fixed" id="wc-ont-auto-rules">
                     <thead>
                         <tr>
-                            <th><?php esc_html_e( 'When order moves to status', 'order-note-templates-for-woocommerce' ); ?></th>
-                            <th><?php esc_html_e( 'Insert this template', 'order-note-templates-for-woocommerce' ); ?></th>
-                            <th style="width:60px"><?php esc_html_e( 'Remove', 'order-note-templates-for-woocommerce' ); ?></th>
+                            <th><?php esc_html_e( 'When order moves to status', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></th>
+                            <th><?php esc_html_e( 'Insert this template', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></th>
+                            <th style="width:60px"><?php esc_html_e( 'Remove', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -165,7 +165,7 @@ class WC_ONT_Auto_Insert {
                         <tr class="wc-ont-rule-row">
                             <td>
                                 <select name="auto_status[]" style="width:100%">
-                                    <option value=""><?php esc_html_e( '— select status —', 'order-note-templates-for-woocommerce' ); ?></option>
+                                    <option value=""><?php esc_html_e( '— select status —', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></option>
                                     <?php foreach ( $statuses as $slug => $label ) :
                                         // WC prefixes statuses with 'wc-' in get_order_statuses
                                         $val = str_replace( 'wc-', '', $slug );
@@ -178,7 +178,7 @@ class WC_ONT_Auto_Insert {
                             </td>
                             <td>
                                 <select name="auto_template[]" style="width:100%">
-                                    <option value=""><?php esc_html_e( '— select template —', 'order-note-templates-for-woocommerce' ); ?></option>
+                                    <option value=""><?php esc_html_e( '— select template —', 'pro-web-design-order-note-templates-for-woocommerce' ); ?></option>
                                     <?php foreach ( $templates as $t ) : ?>
                                         <option value="<?php echo absint( $t->id ); ?>"
                                             <?php selected( absint( $row['template_id'] ), $t->id ); ?>>
@@ -189,7 +189,7 @@ class WC_ONT_Auto_Insert {
                             </td>
                             <td style="text-align:center">
                                 <button type="button" class="button button-small wc-ont-remove-rule"
-                                        title="<?php esc_attr_e( 'Remove rule', 'order-note-templates-for-woocommerce' ); ?>">✕</button>
+                                        title="<?php esc_attr_e( 'Remove rule', 'pro-web-design-order-note-templates-for-woocommerce' ); ?>">✕</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -198,13 +198,13 @@ class WC_ONT_Auto_Insert {
 
                 <p style="margin-top:12px">
                     <button type="button" id="wc-ont-add-rule" class="button">
-                        ➕ <?php esc_html_e( 'Add Rule', 'order-note-templates-for-woocommerce' ); ?>
+                        ➕ <?php esc_html_e( 'Add Rule', 'pro-web-design-order-note-templates-for-woocommerce' ); ?>
                     </button>
                 </p>
 
                 <p class="submit">
                     <button type="submit" class="button button-primary">
-                        💾 <?php esc_html_e( 'Save Rules', 'order-note-templates-for-woocommerce' ); ?>
+                        💾 <?php esc_html_e( 'Save Rules', 'pro-web-design-order-note-templates-for-woocommerce' ); ?>
                     </button>
                 </p>
             </form>
