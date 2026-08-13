@@ -1,0 +1,268 @@
+# Copyright (C) 2025 Hold New Subscriptions
+# This file is distributed under the GPL-2.0-or-later license.
+msgid ""
+msgstr ""
+"Project-Id-Version: hold-new-subscriptions 1.2.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-02 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: manual\n"
+"X-Domain: hold-new-subscriptions\n"
+
+#. Plugin Name
+#: hold-new-subscriptions.php
+msgid "Hold New Subscriptions Until Order Completed"
+msgstr ""
+
+#: hold-new-subscriptions.php
+msgid "Hold New Subscriptions"
+msgstr ""
+
+#: hold-new-subscriptions.php
+msgid "WooCommerce must be active."
+msgstr ""
+
+#: hold-new-subscriptions.php
+msgid "WooCommerce Subscriptions plugin is required."
+msgstr ""
+
+#: hold-new-subscriptions.php
+msgid "Automatically set by Hold New Subscriptions."
+msgstr ""
+
+#. translators: 1: subscription initial status, 2: comma-separated list of activate-on statuses
+#: hold-new-subscriptions.php
+msgid "HNS: subscription set to %1$s until parent order reaches: %2$s"
+msgstr ""
+
+#: hold-new-subscriptions.php
+msgid "Activated when parent order reached target status."
+msgstr ""
+
+#. translators: %s: order status that triggered activation
+#: hold-new-subscriptions.php
+msgid "HNS: subscription activated because parent order status is now \"%s\"."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Hold Subscriptions"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Core Settings"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Configure how new subscriptions are held and when they become active."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Enable plugin"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Initial subscription status"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Activate when parent order becomes"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Skip renewal orders"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Limit by payment gateways"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Allowed gateways"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Add notes to subscriptions"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Write to WooCommerce log"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Email customer when on hold"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Email customer when activated"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Enable core behavior"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "On-hold"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Pending"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Status set on the subscription right after checkout."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Subscriptions will switch to Active when the parent order reaches any of the selected statuses."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Do not change subscription status for renewal orders."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Apply logic only for selected gateways"
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "No gateways detected. Save settings and ensure WooCommerce is active."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Works only if \"Limit by payment gateways\" is enabled."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Write a note on the subscription when status is changed."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Also log actions to WooCommerce > Status > Logs."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Send an email notification to the customer when their subscription is placed on hold."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "The email includes the subscription number, order number, and the statuses that will trigger activation."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "Send a confirmation email to the customer when their subscription is activated."
+msgstr ""
+
+#: includes/class-hns-admin.php
+msgid "The email notifies the customer that their order has been approved and the subscription is now active."
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+msgid "Subscription On Hold (HNS)"
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+msgid "Sent when a new subscription is placed on hold pending order review."
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+msgid "Your subscription is on hold"
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+msgid "Your subscription #{subscription_id} is on hold"
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+#: includes/class-hns-email-active.php
+msgid "Enable/Disable"
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+#: includes/class-hns-email-active.php
+msgid "Enable this email notification"
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+#: includes/class-hns-email-active.php
+msgid "Subject"
+msgstr ""
+
+#. translators: %s: list of available placeholder tags
+#: includes/class-hns-email-hold.php
+#: includes/class-hns-email-active.php
+msgid "Available placeholders: %s"
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+#: includes/class-hns-email-active.php
+msgid "Email Heading"
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+#: includes/class-hns-email-active.php
+msgid "Email type"
+msgstr ""
+
+#: includes/class-hns-email-hold.php
+#: includes/class-hns-email-active.php
+msgid "Choose which format of email to send."
+msgstr ""
+
+#: includes/class-hns-email-active.php
+msgid "Subscription Activated (HNS)"
+msgstr ""
+
+#: includes/class-hns-email-active.php
+msgid "Sent when a held subscription is activated after order approval."
+msgstr ""
+
+#: includes/class-hns-email-active.php
+msgid "Your subscription is now active"
+msgstr ""
+
+#: includes/class-hns-email-active.php
+msgid "Your subscription #{subscription_id} is now active"
+msgstr ""
+
+#. translators: %s: customer first name
+#: emails/hns-subscription-hold.php
+#: emails/plain/hns-subscription-hold.php
+#: emails/hns-subscription-active.php
+#: emails/plain/hns-subscription-active.php
+msgid "Hello %s,"
+msgstr ""
+
+#. translators: 1: subscription ID, 2: order ID
+#: emails/hns-subscription-hold.php
+#: emails/plain/hns-subscription-hold.php
+msgid "Your subscription #%1$d has been placed on hold while we process your order #%2$d."
+msgstr ""
+
+#: emails/hns-subscription-hold.php
+#: emails/plain/hns-subscription-hold.php
+msgid "It will be activated automatically once our specialists have reviewed and approved your order. You will receive a confirmation once your subscription is activated."
+msgstr ""
+
+#. translators: %s: comma-separated list of order statuses
+#: emails/hns-subscription-hold.php
+#: emails/plain/hns-subscription-hold.php
+msgid "Activation will be triggered when the order reaches one of the following statuses: %s."
+msgstr ""
+
+#: emails/hns-subscription-hold.php
+#: emails/plain/hns-subscription-hold.php
+msgid "Thank you for your purchase!"
+msgstr ""
+
+#. translators: 1: subscription ID, 2: order ID
+#: emails/hns-subscription-active.php
+#: emails/plain/hns-subscription-active.php
+msgid "Your subscription #%1$d has been activated. Your order #%2$d has been reviewed and approved by our specialists."
+msgstr ""
+
+#: emails/hns-subscription-active.php
+#: emails/plain/hns-subscription-active.php
+msgid "Enjoy watching! Please top up your wallet balance in advance to avoid interruptions."
+msgstr ""

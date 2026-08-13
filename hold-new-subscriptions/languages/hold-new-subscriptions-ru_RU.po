@@ -1,0 +1,170 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: hold-new-subscriptions 1.2.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-02 00:00+0000\n"
+"PO-Revision-Date: 2025-10-02 00:00+0000\n"
+"Last-Translator: ChatGPT Assistant\n"
+"Language-Team: Russian\n"
+"Language: ru_RU\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: ChatGPT\n"
+
+#: includes/class-hns-admin.php
+msgid "Hold Subscriptions"
+msgstr "Удержание подписок"
+
+#: includes/class-hns-admin.php
+msgid "Core Settings"
+msgstr "Основные настройки"
+
+#: includes/class-hns-admin.php
+msgid "Configure how new subscriptions are held and when they become active."
+msgstr "Настройте, как удерживать новые подписки и когда их активировать."
+
+#: includes/class-hns-admin.php
+msgid "Enable plugin"
+msgstr "Включить плагин"
+
+#: includes/class-hns-admin.php
+msgid "Initial subscription status"
+msgstr "Начальный статус подписки"
+
+#: includes/class-hns-admin.php
+msgid "Activate when parent order becomes"
+msgstr "Активировать, когда заказ станет"
+
+#: includes/class-hns-admin.php
+msgid "Skip renewal orders"
+msgstr "Пропускать счета на продление"
+
+#: includes/class-hns-admin.php
+msgid "Limit by payment gateways"
+msgstr "Ограничить по платёжным шлюзам"
+
+#: includes/class-hns-admin.php
+msgid "Allowed gateways"
+msgstr "Разрешённые шлюзы"
+
+#: includes/class-hns-admin.php
+msgid "Add notes to subscriptions"
+msgstr "Добавлять заметки к подписке"
+
+#: includes/class-hns-admin.php
+msgid "Write to WooCommerce log"
+msgstr "Писать в журнал WooCommerce"
+
+#: includes/class-hns-admin.php
+msgid "Enable core behavior"
+msgstr "Включить основную логику"
+
+#: includes/class-hns-admin.php
+msgid "On-hold"
+msgstr "На удержании"
+
+#: includes/class-hns-admin.php
+msgid "Pending"
+msgstr "Ожидание"
+
+#: includes/class-hns-admin.php
+msgid "Status set on the subscription right after checkout."
+msgstr "Статус, устанавливаемый подписке сразу после оформления."
+
+#: includes/class-hns-admin.php
+msgid "Subscriptions will switch to Active when the parent order reaches any of the selected statuses."
+msgstr "Подписка станет активной, когда заказ достигнет любого из выбранных статусов."
+
+#: includes/class-hns-admin.php
+msgid "Do not change subscription status for renewal orders."
+msgstr "Не менять статус подписки для счетов на продление."
+
+#: includes/class-hns-admin.php
+msgid "Apply logic only for selected gateways"
+msgstr "Применять логику только для выбранных шлюзов"
+
+#: includes/class-hns-admin.php
+msgid "No gateways detected. Save settings and ensure WooCommerce is active."
+msgstr "Шлюзы не обнаружены. Сохраните настройки и убедитесь, что WooCommerce активен."
+
+#: includes/class-hns-admin.php
+msgid "Works only if \"Limit by payment gateways\" is enabled."
+msgstr "Работает только если включено «Ограничить по платёжным шлюзам»."
+
+#: includes/class-hns-admin.php
+msgid "Write a note on the subscription when status is changed."
+msgstr "Добавлять заметку к подписке при смене статуса."
+
+#: includes/class-hns-admin.php
+msgid "Also log actions to WooCommerce > Status > Logs."
+msgstr "Также писать действия в WooCommerce → Статус → Логи."
+
+#: hold-new-subscriptions.php
+msgid "Hold New Subscriptions"
+msgstr "Удержание новых подписок"
+
+#: hold-new-subscriptions.php
+msgid "WooCommerce must be active."
+msgstr "Необходимо активировать WooCommerce."
+
+#: hold-new-subscriptions.php
+msgid "WooCommerce Subscriptions plugin is required."
+msgstr "Требуется плагин WooCommerce Subscriptions."
+
+#: hold-new-subscriptions.php
+msgid "Automatically set by Hold New Subscriptions."
+msgstr "Автоматически установлено плагином «Удержание новых подписок»."
+
+#: hold-new-subscriptions.php
+msgid "HNS: subscription set to %1$s until parent order reaches: %2$s"
+msgstr "HNS: статус подписки установлен в %1$s до достижения заказом статусов: %2$s"
+
+#: hold-new-subscriptions.php
+msgid "Activated when parent order reached target status."
+msgstr "Активировано, когда заказ достиг целевого статуса."
+
+#: hold-new-subscriptions.php
+msgid "HNS: subscription activated because parent order status is now \"%s\"."
+msgstr "HNS: подписка активирована, так как статус заказа теперь «%s»."
+
+#: includes/class-hns-email-hold.php
+msgid "Your subscription is on hold"
+msgstr "Ваша подписка приостановлена"
+
+#: includes/class-hns-email-active.php
+msgid "Your subscription is now active"
+msgstr "Ваша подписка теперь активна"
+
+#: emails/hns-subscription-hold.php emails/plain/hns-subscription-hold.php
+#: emails/hns-subscription-active.php emails/plain/hns-subscription-active.php
+msgid "Hello %s,"
+msgstr "Здравствуйте, %s,"
+
+#: emails/hns-subscription-hold.php emails/plain/hns-subscription-hold.php
+msgid "Your subscription #%1$d has been placed on hold while we process your order #%2$d."
+msgstr "Ваша подписка #%1$d приостановлена на время обработки заказа #%2$d."
+
+#: emails/hns-subscription-hold.php emails/plain/hns-subscription-hold.php
+msgid "It will be activated automatically once our specialists have reviewed and approved your order."
+msgstr "Она будет активирована автоматически, как только заказ будет проверен и одобрен нашими специалистами."
+
+#: emails/hns-subscription-hold.php emails/plain/hns-subscription-hold.php
+msgid "You will receive an additional confirmation once your subscription is activated."
+msgstr "Вы получите дополнительное подтверждение об активации подписки."
+
+#: emails/hns-subscription-active.php emails/plain/hns-subscription-active.php
+msgid "Your subscription #%d has been activated."
+msgstr "Ваша подписка #%d активирована."
+
+#: emails/hns-subscription-active.php emails/plain/hns-subscription-active.php
+msgid "Enjoy watching!"
+msgstr "Приятного просмотра!"
+
+#: emails/hns-subscription-active.php emails/plain/hns-subscription-active.php
+msgid "This subscription is set up for automatic renewal using funds from your personal wallet on the site."
+msgstr "Эта подписка настроена на автоматическое продление с использованием средств из личного кошелька на сайте."
+
+#: emails/hns-subscription-active.php emails/plain/hns-subscription-active.php
+msgid "Please top up your wallet in advance to avoid interruptions in viewing."
+msgstr "Пополняйте личный кошелек заранее, чтобы избежать перерыва в просмотре."
