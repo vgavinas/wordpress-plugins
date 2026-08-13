@@ -112,15 +112,15 @@ class WC_OTL_Install {
 
 		$defaults = array(
 			array(
-				'name'  => __( 'Urgent', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+				'name'  => __( 'Urgent', 'order-tags-labels-for-woocommerce' ),
 				'color' => '#e53935',
 			),
 			array(
-				'name'  => __( 'VIP', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+				'name'  => __( 'VIP', 'order-tags-labels-for-woocommerce' ),
 				'color' => '#8e24aa',
 			),
 			array(
-				'name'  => __( 'Follow Up', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+				'name'  => __( 'Follow Up', 'order-tags-labels-for-woocommerce' ),
 				'color' => '#fb8c00',
 			),
 		);

@@ -17,7 +17,7 @@ Save and reuse order note templates in WooCommerce admin. Full HPOS and WooComme
 
 **WordPress.org:** https://wordpress.org/plugins/pro-web-design-order-note-templates-for-woocommerce/
 
-### [Pro Web Design Order Tags & Labels for WooCommerce](./pro-web-design-order-tags-labels-for-woocommerce/)
+### [Order Tags & Labels for WooCommerce](./order-tags-labels-for-woocommerce/)
 Organize WooCommerce orders with color-coded tags. Assign manually or automatically, filter and bulk-manage tagged orders.
 
 **Features:**
@@ -28,7 +28,9 @@ Organize WooCommerce orders with color-coded tags. Assign manually or automatica
 - Filter and bulk add/remove tags from the Orders list, CSV export
 - Full HPOS support and WooCommerce Subscriptions compatible
 
-**Distribution:** Freemius only (not yet submitted to WordPress.org).
+**WordPress.org:** https://wordpress.org/plugins/pro-web-design-order-tags-labels-for-woocommerce/ (awaiting review)
+
+Single source used for both the Freemius build and the WordPress.org package, same pattern as Order Note Templates: the plugin's internal file name, folder name and Freemius `slug` stay on the original identifiers (`order-tags-labels-for-woocommerce`), while only the displayed `Plugin Name` / readme title use the newer "Pro Web Design" branding.
 
 ## License
 

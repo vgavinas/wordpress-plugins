@@ -70,12 +70,12 @@ class WC_OTL_Order_List_Column {
 		foreach ( $columns as $key => $label ) {
 			$new_columns[ $key ] = $label;
 			if ( 'order_number' === $key || 'order_title' === $key ) {
-				$new_columns['order_tags'] = __( 'Tags', 'pro-web-design-order-tags-labels-for-woocommerce' );
+				$new_columns['order_tags'] = __( 'Tags', 'order-tags-labels-for-woocommerce' );
 			}
 		}
 
 		if ( ! isset( $new_columns['order_tags'] ) ) {
-			$new_columns['order_tags'] = __( 'Tags', 'pro-web-design-order-tags-labels-for-woocommerce' );
+			$new_columns['order_tags'] = __( 'Tags', 'order-tags-labels-for-woocommerce' );
 		}
 
 		return $new_columns;

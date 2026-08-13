@@ -46,8 +46,8 @@ class WC_OTL_Admin_Page {
 	public function register_menu() {
 		add_submenu_page(
 			'woocommerce',
-			__( 'Order Tags', 'pro-web-design-order-tags-labels-for-woocommerce' ),
-			__( 'Order Tags', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+			__( 'Order Tags', 'order-tags-labels-for-woocommerce' ),
+			__( 'Order Tags', 'order-tags-labels-for-woocommerce' ),
 			'manage_woocommerce',
 			'wc-order-tags',
 			array( $this, 'render_page' )
@@ -115,9 +115,9 @@ class WC_OTL_Admin_Page {
 				'nonce'   => wp_create_nonce( 'wc_otl_nonce' ),
 				'isPro'   => wc_otl_fs() && wc_otl_fs()->can_use_premium_code(),
 				'i18n'    => array(
-					'confirmDelete' => __( 'Delete this tag? It will be removed from all orders.', 'pro-web-design-order-tags-labels-for-woocommerce' ),
-					'save'          => __( 'Save', 'pro-web-design-order-tags-labels-for-woocommerce' ),
-					'cancel'        => __( 'Cancel', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+					'confirmDelete' => __( 'Delete this tag? It will be removed from all orders.', 'order-tags-labels-for-woocommerce' ),
+					'save'          => __( 'Save', 'order-tags-labels-for-woocommerce' ),
+					'cancel'        => __( 'Cancel', 'order-tags-labels-for-woocommerce' ),
 				),
 			)
 		);
@@ -129,7 +129,7 @@ class WC_OTL_Admin_Page {
 	 */
 	public function handle_save_settings() {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_die( esc_html__( 'You are not allowed to do this.', 'pro-web-design-order-tags-labels-for-woocommerce' ) );
+			wp_die( esc_html__( 'You are not allowed to do this.', 'order-tags-labels-for-woocommerce' ) );
 		}
 		check_admin_referer( 'wc_otl_save_settings' );
 
@@ -151,15 +151,15 @@ class WC_OTL_Admin_Page {
 		$is_pro = wc_otl_fs() && wc_otl_fs()->can_use_premium_code();
 		?>
 		<div class="wrap wc-otl-wrap">
-			<h1><?php esc_html_e( 'Order Tags', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></h1>
+			<h1><?php esc_html_e( 'Order Tags', 'order-tags-labels-for-woocommerce' ); ?></h1>
 			<p class="description">
-				<?php esc_html_e( 'Create color-coded tags and assign them to orders from the order edit screen.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?>
+				<?php esc_html_e( 'Create color-coded tags and assign them to orders from the order edit screen.', 'order-tags-labels-for-woocommerce' ); ?>
 			</p>
 
 			<?php if ( ! $is_pro ) : ?>
 				<div class="notice notice-info wc-otl-limit-notice">
 					<p>
-						<strong><?php esc_html_e( 'Upgrade to Professional for auto-tag rules, bulk actions and CSV export.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></strong>
+						<strong><?php esc_html_e( 'Upgrade to Professional for auto-tag rules, bulk actions and CSV export.', 'order-tags-labels-for-woocommerce' ); ?></strong>
 					</p>
 				</div>
 			<?php endif; ?>
@@ -168,9 +168,9 @@ class WC_OTL_Admin_Page {
 				<thead>
 					<tr>
 						<th style="width:40px"></th>
-						<th><?php esc_html_e( 'Tag', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></th>
-						<th><?php esc_html_e( 'Color', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></th>
-						<th style="width:160px"><?php esc_html_e( 'Actions', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></th>
+						<th><?php esc_html_e( 'Tag', 'order-tags-labels-for-woocommerce' ); ?></th>
+						<th><?php esc_html_e( 'Color', 'order-tags-labels-for-woocommerce' ); ?></th>
+						<th style="width:160px"><?php esc_html_e( 'Actions', 'order-tags-labels-for-woocommerce' ); ?></th>
 					</tr>
 				</thead>
 				<tbody id="wc-otl-tags-list">
@@ -184,42 +184,42 @@ class WC_OTL_Admin_Page {
 							</td>
 							<td class="wc-otl-col-color"><?php echo esc_html( $tag['color'] ); ?></td>
 							<td class="wc-otl-col-actions">
-								<button type="button" class="button wc-otl-edit-tag"><?php esc_html_e( 'Edit', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></button>
-								<button type="button" class="button wc-otl-delete-tag"><?php esc_html_e( 'Delete', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></button>
+								<button type="button" class="button wc-otl-edit-tag"><?php esc_html_e( 'Edit', 'order-tags-labels-for-woocommerce' ); ?></button>
+								<button type="button" class="button wc-otl-delete-tag"><?php esc_html_e( 'Delete', 'order-tags-labels-for-woocommerce' ); ?></button>
 							</td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>
 			</table>
 
-			<h2><?php esc_html_e( 'Add a New Tag', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></h2>
+			<h2><?php esc_html_e( 'Add a New Tag', 'order-tags-labels-for-woocommerce' ); ?></h2>
 			<form id="wc-otl-add-tag-form">
 				<table class="form-table">
 					<tr>
-						<th><label for="wc-otl-new-tag-name"><?php esc_html_e( 'Name', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></label></th>
+						<th><label for="wc-otl-new-tag-name"><?php esc_html_e( 'Name', 'order-tags-labels-for-woocommerce' ); ?></label></th>
 						<td><input type="text" id="wc-otl-new-tag-name" maxlength="100" required /></td>
 					</tr>
 					<tr>
-						<th><label for="wc-otl-new-tag-color"><?php esc_html_e( 'Color', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></label></th>
+						<th><label for="wc-otl-new-tag-color"><?php esc_html_e( 'Color', 'order-tags-labels-for-woocommerce' ); ?></label></th>
 						<td><input type="text" id="wc-otl-new-tag-color" class="wc-otl-color-picker" value="#2271b1" /></td>
 					</tr>
 				</table>
 				<p>
 					<button type="submit" class="button button-primary">
-						<?php esc_html_e( 'Add Tag', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?>
+						<?php esc_html_e( 'Add Tag', 'order-tags-labels-for-woocommerce' ); ?>
 					</button>
 				</p>
 			</form>
 
 			<?php if ( $is_pro ) : ?>
 				<hr />
-				<h2><?php esc_html_e( 'Auto-Tag Rules', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></h2>
+				<h2><?php esc_html_e( 'Auto-Tag Rules', 'order-tags-labels-for-woocommerce' ); ?></h2>
 				<p class="description">
 					<?php
 					// Rendered by WC_OTL_Auto_Tag_Rules — kept as a separate tab/section to avoid coupling Free/Pro UI.
 					printf(
 						/* translators: %s: URL to the Auto-Tag Rules screen. */
-						wp_kses_post( __( 'Manage automatic tagging rules on the <a href="%s">Auto-Tag Rules</a> screen.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ),
+						wp_kses_post( __( 'Manage automatic tagging rules on the <a href="%s">Auto-Tag Rules</a> screen.', 'order-tags-labels-for-woocommerce' ) ),
 						esc_url( admin_url( 'admin.php?page=wc-order-tag-rules' ) )
 					);
 					?>
@@ -227,10 +227,10 @@ class WC_OTL_Admin_Page {
 			<?php endif; ?>
 
 			<hr />
-			<h2><?php esc_html_e( 'Settings', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></h2>
+			<h2><?php esc_html_e( 'Settings', 'order-tags-labels-for-woocommerce' ); ?></h2>
 
 			<?php if ( isset( $_GET['settings-updated'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>
-				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings saved.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></p></div>
+				<div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Settings saved.', 'order-tags-labels-for-woocommerce' ); ?></p></div>
 			<?php endif; ?>
 
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -238,7 +238,7 @@ class WC_OTL_Admin_Page {
 				<?php wp_nonce_field( 'wc_otl_save_settings' ); ?>
 				<table class="form-table">
 					<tr>
-						<th><?php esc_html_e( 'On Uninstall', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></th>
+						<th><?php esc_html_e( 'On Uninstall', 'order-tags-labels-for-woocommerce' ); ?></th>
 						<td>
 							<label>
 								<input
@@ -247,16 +247,16 @@ class WC_OTL_Admin_Page {
 									value="1"
 									<?php checked( get_option( 'wc_otl_delete_data_on_uninstall', 0 ), 1 ); ?>
 								/>
-								<?php esc_html_e( 'Delete all tags, tag assignments and auto-tag rules when this plugin is deleted.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?>
+								<?php esc_html_e( 'Delete all tags, tag assignments and auto-tag rules when this plugin is deleted.', 'order-tags-labels-for-woocommerce' ); ?>
 							</label>
 							<p class="description">
-								<?php esc_html_e( 'Leave unchecked to keep your data if you reinstall the plugin later. This only removes plugin data, never your orders.', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?>
+								<?php esc_html_e( 'Leave unchecked to keep your data if you reinstall the plugin later. This only removes plugin data, never your orders.', 'order-tags-labels-for-woocommerce' ); ?>
 							</p>
 						</td>
 					</tr>
 				</table>
 				<p>
-					<button type="submit" class="button"><?php esc_html_e( 'Save Settings', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></button>
+					<button type="submit" class="button"><?php esc_html_e( 'Save Settings', 'order-tags-labels-for-woocommerce' ); ?></button>
 				</p>
 			</form>
 		</div>

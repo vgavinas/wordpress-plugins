@@ -99,12 +99,12 @@ class WC_OTL_Bulk_Actions {
 		foreach ( WC_OTL_Tags::get_all_tags() as $tag ) {
 			$actions[ 'wc_otl_add_tag_' . $tag['id'] ] = sprintf(
 				/* translators: %s: tag name. */
-				__( 'Add tag: %s', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+				__( 'Add tag: %s', 'order-tags-labels-for-woocommerce' ),
 				$tag['name']
 			);
 			$actions[ 'wc_otl_remove_tag_' . $tag['id'] ] = sprintf(
 				/* translators: %s: tag name. */
-				__( 'Remove tag: %s', 'pro-web-design-order-tags-labels-for-woocommerce' ),
+				__( 'Remove tag: %s', 'order-tags-labels-for-woocommerce' ),
 				$tag['name']
 			);
 		}
@@ -158,7 +158,7 @@ class WC_OTL_Bulk_Actions {
 				esc_html(
 					sprintf(
 						/* translators: %d: number of orders tagged. */
-						_n( '%d order tagged.', '%d orders tagged.', absint( $_REQUEST['wc_otl_tagged'] ), 'pro-web-design-order-tags-labels-for-woocommerce' ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+						_n( '%d order tagged.', '%d orders tagged.', absint( $_REQUEST['wc_otl_tagged'] ), 'order-tags-labels-for-woocommerce' ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 						absint( $_REQUEST['wc_otl_tagged'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					)
 				)
@@ -171,7 +171,7 @@ class WC_OTL_Bulk_Actions {
 				esc_html(
 					sprintf(
 						/* translators: %d: number of orders untagged. */
-						_n( '%d order updated.', '%d orders updated.', absint( $_REQUEST['wc_otl_untagged'] ), 'pro-web-design-order-tags-labels-for-woocommerce' ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+						_n( '%d order updated.', '%d orders updated.', absint( $_REQUEST['wc_otl_untagged'] ), 'order-tags-labels-for-woocommerce' ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 						absint( $_REQUEST['wc_otl_untagged'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					)
 				)

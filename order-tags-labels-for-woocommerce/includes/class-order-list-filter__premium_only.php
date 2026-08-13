@@ -106,7 +106,7 @@ class WC_OTL_Order_List_Filter {
 		}
 		?>
 		<select name="wc_otl_tag">
-			<option value="0"><?php esc_html_e( 'All tags', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?></option>
+			<option value="0"><?php esc_html_e( 'All tags', 'order-tags-labels-for-woocommerce' ); ?></option>
 			<?php foreach ( $tags as $tag ) : ?>
 				<option value="<?php echo esc_attr( $tag['id'] ); ?>" <?php selected( $selected, $tag['id'] ); ?>>
 					<?php echo esc_html( $tag['name'] ); ?>
