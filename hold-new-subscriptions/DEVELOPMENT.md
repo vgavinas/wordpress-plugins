@@ -316,12 +316,14 @@ zip -r -X hold-new-subscriptions-<version>.zip hold-new-subscriptions \
   -x "*.DS_Store" -x "__MACOSX*" -x "*/DEVELOPMENT.md"
 ```
 
+## Plugin Check: clean as of 1.3.1
+Re-run against the 1.3.1 build on a real WordPress + WooCommerce +
+WooCommerce Subscriptions install: **"Checks complete. No errors found."**
+All 11 errors and 5 warnings from the 1.3.0 report are resolved and nothing
+new surfaced. The free/current build is functionally publish-ready from a
+Plugin Check standpoint — see below for what's still deliberately deferred.
+
 ## Still open before this is publish-ready
-- **Re-run Plugin Check on the 1.3.1 build** to confirm the fixes above
-  actually clear the reported errors/warnings and that nothing new surfaces.
-  This wasn't done yet in this pass (no live WordPress + WooCommerce
-  Subscriptions install available here) — same as before, needs the real
-  test site.
 - Freemius/monetization integration is deliberately not part of this pass.
 - `readme.txt` deliberately does **not** describe the Pro modules yet (no
   "Professional Features" section like ONT/OTL have). Those features aren't
