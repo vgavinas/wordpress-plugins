@@ -1,5 +1,5 @@
 === Pro Web Design Order Note Templates for WooCommerce ===
-Contributors: protechnologies, prowebdeignuk, freemius
+Contributors: prowebdeignuk, freemius
 Tags: woocommerce, order notes, templates, subscriptions, hpos
 Requires at least: 5.8
 Tested up to: 7.0
