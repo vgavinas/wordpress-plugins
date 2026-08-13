@@ -3,12 +3,12 @@
  * Plugin Name:       Pro Web Design Order Tags & Labels for WooCommerce
  * Plugin URI:        https://wordpress.org/plugins/pro-web-design-order-tags-labels-for-woocommerce/
  * Description:       Organize WooCommerce orders with color-coded tags. Assign tags manually or automatically, filter and bulk-manage tagged orders.
- * Version:           1.1.4
+ * Version:           1.1.5
  * Requires at least: 6.2
  * Requires PHP:      7.4
  * Author:            Pro Technologies Limited
  * Author URI:        https://www.pro-webdesign.co.uk
- * Text Domain:       order-tags-labels-for-woocommerce
+ * Text Domain:       pro-web-design-order-tags-labels-for-woocommerce
  * Domain Path:       /languages
  * Requires Plugins:  woocommerce
  * WC requires at least: 7.1
@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 // -----------------------------------------------------------------------
 // Constants
 // -----------------------------------------------------------------------
-define( 'WC_OTL_VERSION', '1.1.4' );
+define( 'WC_OTL_VERSION', '1.1.5' );
 define( 'WC_OTL_FILE', __FILE__ );
 define( 'WC_OTL_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WC_OTL_URL', plugin_dir_url( __FILE__ ) );
@@ -146,7 +146,7 @@ function wc_otl_uninstall_cleanup() {
  */
 function wc_otl_missing_woocommerce_notice() {
 	echo '<div class="notice notice-error"><p>';
-	esc_html_e( 'Order Tags & Labels for WooCommerce requires WooCommerce to be installed and active.', 'order-tags-labels-for-woocommerce' );
+	esc_html_e( 'Order Tags & Labels for WooCommerce requires WooCommerce to be installed and active.', 'pro-web-design-order-tags-labels-for-woocommerce' );
 	echo '</p></div>';
 }
 
@@ -216,7 +216,7 @@ function wc_otl_bootstrap() {
 
 	// No load_plugin_textdomain() call here: since WP 4.6, WordPress.org automatically
 	// loads translations for plugins hosted there whose text domain matches the plugin
-	// slug (order-tags-labels-for-woocommerce) — a manual call is redundant and discouraged.
+	// slug (pro-web-design-order-tags-labels-for-woocommerce) — a manual call is redundant and discouraged.
 }
 add_action( 'plugins_loaded', 'wc_otl_bootstrap', 20 );
 

@@ -69,7 +69,7 @@ class WC_OTL_Order_Meta_Box {
 		foreach ( array_unique( $screens ) as $screen ) {
 			add_meta_box(
 				'wc-otl-order-tags',
-				__( 'Order Tags', 'order-tags-labels-for-woocommerce' ),
+				__( 'Order Tags', 'pro-web-design-order-tags-labels-for-woocommerce' ),
 				array( $this, 'render_meta_box' ),
 				$screen,
 				'side',
@@ -105,7 +105,7 @@ class WC_OTL_Order_Meta_Box {
 					<?php
 					printf(
 						/* translators: %s: URL to the tag management screen. */
-						wp_kses_post( __( 'No tags yet. <a href="%s">Create one</a>.', 'order-tags-labels-for-woocommerce' ) ),
+						wp_kses_post( __( 'No tags yet. <a href="%s">Create one</a>.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ),
 						esc_url( admin_url( 'admin.php?page=wc-order-tags' ) )
 					);
 					?>
@@ -132,7 +132,7 @@ class WC_OTL_Order_Meta_Box {
 
 			<p class="wc-otl-meta-box-footer">
 				<a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-order-tags' ) ); ?>">
-					<?php esc_html_e( 'Manage tags', 'order-tags-labels-for-woocommerce' ); ?>
+					<?php esc_html_e( 'Manage tags', 'pro-web-design-order-tags-labels-for-woocommerce' ); ?>
 				</a>
 			</p>
 			<span class="spinner wc-otl-spinner"></span>

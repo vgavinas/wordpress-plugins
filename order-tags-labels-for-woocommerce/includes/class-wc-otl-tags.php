@@ -81,7 +81,7 @@ class WC_OTL_Tags {
 		wp_cache_delete( 'wc_otl_all_tags', 'wc_otl' );
 
 		if ( false === $inserted ) {
-			return new WP_Error( 'wc_otl_db_error', __( 'Could not create the tag.', 'order-tags-labels-for-woocommerce' ) );
+			return new WP_Error( 'wc_otl_db_error', __( 'Could not create the tag.', 'pro-web-design-order-tags-labels-for-woocommerce' ) );
 		}
 
 		return (int) $wpdb->insert_id;

@@ -1,10 +1,10 @@
 === Pro Web Design Order Tags & Labels for WooCommerce ===
-Contributors: protechnologies, prowebdeignuk, freemius
+Contributors: prowebdeignuk, freemius
 Tags: woocommerce, order tags, order labels, order management, admin
 Requires at least: 6.2
 Tested up to: 7.0
 Requires PHP: 7.4
-Stable tag: 1.1.4
+Stable tag: 1.1.5
 Requires Plugins: woocommerce
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -39,7 +39,7 @@ If you like keeping your order admin tidy, check out our other plugin, [Pro Web 
 
 == Installation ==
 
-1. Upload the plugin files to `/wp-content/plugins/order-tags-labels-for-woocommerce/`, or install directly through the WordPress plugins screen.
+1. Upload the plugin files to `/wp-content/plugins/pro-web-design-order-tags-labels-for-woocommerce/`, or install directly through the WordPress plugins screen.
 2. Activate the plugin through the "Plugins" screen in WordPress.
 3. Go to **WooCommerce → Order Tags** to create your first tags.
 4. Open any order to assign tags from the "Order Tags" box in the sidebar.
@@ -70,6 +70,10 @@ Filtering and bulk tag actions are Professional features.
 4. Auto-tag rules (Professional).
 
 == Changelog ==
+
+= 1.1.5 =
+* Internal: text domain changed back to `pro-web-design-order-tags-labels-for-woocommerce`, matching the plugin's actual WordPress.org directory slug (the file name, folder name and Freemius product slug stay on the original `order-tags-labels-for-woocommerce` identifiers). Same convention already used by Order Note Templates.
+* Fixed: removed an invalid entry from the readme's Contributors list.
 
 = 1.1.4 =
 * Internal: reverted the plugin's file name and text domain back to `order-tags-labels-for-woocommerce` for this (Freemius-distributed) build, keeping it internally consistent. The WordPress.org listing is a separate, independently-built package under the new "Pro Web Design" naming and is not affected.

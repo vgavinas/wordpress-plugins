@@ -50,7 +50,7 @@ class WC_OTL_Ajax {
 		check_ajax_referer( 'wc_otl_nonce', 'nonce' );
 
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			wp_send_json_error( array( 'message' => __( 'You are not allowed to do this.', 'order-tags-labels-for-woocommerce' ) ), 403 );
+			wp_send_json_error( array( 'message' => __( 'You are not allowed to do this.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ), 403 );
 		}
 	}
 
@@ -65,7 +65,7 @@ class WC_OTL_Ajax {
 		$tag_id   = isset( $_POST['tag_id'] ) ? absint( $_POST['tag_id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $order_id || ! $tag_id || ! wc_get_order( $order_id ) ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid order or tag.', 'order-tags-labels-for-woocommerce' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid order or tag.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ) );
 		}
 
 		$ok = WC_OTL_Tags::assign_tag( $order_id, $tag_id );
@@ -74,7 +74,7 @@ class WC_OTL_Ajax {
 			wp_send_json_success();
 		}
 
-		wp_send_json_error( array( 'message' => __( 'Could not assign the tag.', 'order-tags-labels-for-woocommerce' ) ) );
+		wp_send_json_error( array( 'message' => __( 'Could not assign the tag.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ) );
 	}
 
 	/**
@@ -88,7 +88,7 @@ class WC_OTL_Ajax {
 		$tag_id   = isset( $_POST['tag_id'] ) ? absint( $_POST['tag_id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $order_id || ! $tag_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid order or tag.', 'order-tags-labels-for-woocommerce' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid order or tag.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ) );
 		}
 
 		WC_OTL_Tags::remove_tag( $order_id, $tag_id );
@@ -106,7 +106,7 @@ class WC_OTL_Ajax {
 		$color = isset( $_POST['color'] ) ? sanitize_hex_color( wp_unslash( $_POST['color'] ) ) : '#2271b1'; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( '' === $name ) {
-			wp_send_json_error( array( 'message' => __( 'Tag name is required.', 'order-tags-labels-for-woocommerce' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Tag name is required.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ) );
 		}
 
 		$result = WC_OTL_Tags::create_tag( $name, $color ? $color : '#2271b1' );
@@ -130,7 +130,7 @@ class WC_OTL_Ajax {
 		$color  = isset( $_POST['color'] ) ? sanitize_hex_color( wp_unslash( $_POST['color'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $tag_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid tag.', 'order-tags-labels-for-woocommerce' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid tag.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ) );
 		}
 
 		$args = array();
@@ -155,7 +155,7 @@ class WC_OTL_Ajax {
 		$tag_id = isset( $_POST['tag_id'] ) ? absint( $_POST['tag_id'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		if ( ! $tag_id ) {
-			wp_send_json_error( array( 'message' => __( 'Invalid tag.', 'order-tags-labels-for-woocommerce' ) ) );
+			wp_send_json_error( array( 'message' => __( 'Invalid tag.', 'pro-web-design-order-tags-labels-for-woocommerce' ) ) );
 		}
 
 		WC_OTL_Tags::delete_tag( $tag_id );
