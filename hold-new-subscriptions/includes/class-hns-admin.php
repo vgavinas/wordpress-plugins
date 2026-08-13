@@ -107,6 +107,16 @@ class HNS_Admin {
                 <?php do_settings_sections( 'hns_settings' ); ?>
                 <?php submit_button(); ?>
             </form>
+            <?php
+            /**
+             * Extension point for Pro-only settings sections. Rendered as a separate
+             * <form>/settings group so Pro's own option ('hns_pro_options') never
+             * touches this file's sanitize()/option handling.
+             *
+             * @param array $opts Current core (free) options, for context.
+             */
+            do_action( 'hns_after_settings_page', $opts );
+            ?>
         </div>
         <?php
     }

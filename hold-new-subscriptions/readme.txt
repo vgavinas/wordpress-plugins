@@ -5,7 +5,7 @@ Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.2
 Requires Plugins: woocommerce
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,9 @@ The subscription activates as soon as the parent order reaches any one of the st
 1. Settings page under WooCommerce → Hold Subscriptions
 
 == Changelog ==
+
+= 1.3.0 =
+* Internal: added extensibility hooks (`hns_subscription_options`, `hns_subscription_held`, `hns_subscription_activated`) and a shared activation helper. No behaviour change for this (free) build — these exist so optional Pro functionality can plug in later without touching this codebase.
 
 = 1.2.1 =
 * Fixed: the duplicate-activation guard used `add_post_meta()`, which reads and writes `wp_postmeta` directly and silently stops working once a store enables WooCommerce HPOS (subscriptions then store their meta in a separate custom table). It now uses the subscription's own metadata API (`get_meta()` / `update_meta_data()` / `save_meta_data()`), matching HPOS and legacy storage alike.

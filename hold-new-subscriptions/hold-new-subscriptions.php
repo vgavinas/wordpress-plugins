@@ -3,7 +3,7 @@
  * Plugin Name: Hold New Subscriptions Until Order Completed
  * Description: Puts newly created WooCommerce Subscriptions on hold (configurable) until the parent order reaches selected statuses (e.g. Completed), then activates them.
  * Author: Vitalijus Gavinas
- * Version: 1.2.1
+ * Version: 1.3.0
  * License: GPL-2.0-or-later
  * Text Domain: hold-new-subscriptions
  * Domain Path: /languages
@@ -16,7 +16,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'HNS_PLUGIN_VERSION', '1.2.1' );
+define( 'HNS_PLUGIN_VERSION', '1.3.0' );
 define( 'HNS_PLUGIN_FILE', __FILE__ );
 define( 'HNS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HNS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
@@ -44,6 +44,60 @@ if ( file_exists( HNS_PLUGIN_DIR . 'includes/class-hns-admin.php' ) ) {
 if ( file_exists( HNS_PLUGIN_DIR . 'includes/class-hns-i18n.php' ) ) {
     require_once HNS_PLUGIN_DIR . 'includes/class-hns-i18n.php';
 }
+
+/**
+ * Whether Pro features are active.
+ *
+ * No Freemius integration yet (deliberately — monetization comes after the
+ * free version is solid). This is a placeholder gate so Pro-only code can be
+ * built and reviewed now, then switched on later by making this function
+ * check the Freemius license instead, with no changes needed anywhere else.
+ *
+ * For local testing before Freemius is wired up:
+ *   add_filter( 'hns_is_pro', '__return_true' );
+ */
+function hns_is_pro() {
+    return (bool) apply_filters( 'hns_is_pro', false );
+}
+
+/**
+ * Load Pro-only modules.
+ *
+ * Each lives in includes/pro/class-hns-<feature>__premium_only.php and is
+ * required only when Pro is active — the same "__premium_only" naming
+ * convention used by Order Note Templates / Order Tags & Labels, so this
+ * plugin is ready for the same Freemius free-build stripping process
+ * whenever monetization is connected. Until then, with hns_is_pro() always
+ * false, none of this code loads or runs.
+ */
+function hns_load_pro_modules() {
+    if ( ! hns_is_pro() ) { return; }
+    if ( ! class_exists( 'WooCommerce' ) || ! function_exists( 'wcs_order_contains_subscription' ) ) { return; }
+
+    $pro_dir = HNS_PLUGIN_DIR . 'includes/pro/';
+    $modules = array(
+        'class-hns-send-info__premium_only.php',
+        'class-hns-product-rules__premium_only.php',
+        'class-hns-escalation__premium_only.php',
+        'class-hns-notifications__premium_only.php',
+    );
+    foreach ( $modules as $module ) {
+        $path = $pro_dir . $module;
+        if ( file_exists( $path ) ) {
+            require_once $path;
+        }
+    }
+}
+add_action( 'plugins_loaded', 'hns_load_pro_modules', 6 ); // after hns_boot() (priority 5).
+
+/**
+ * Clear the Pro escalation-timer cron event on deactivation. Safe to call
+ * even when the Pro module was never active (wp_clear_scheduled_hook() is a
+ * no-op if nothing was scheduled).
+ */
+register_deactivation_hook( HNS_PLUGIN_FILE, function () {
+    wp_clear_scheduled_hook( 'hns_pro_escalation_check' );
+} );
 
 /**
  * Register custom email classes with WooCommerce.
@@ -178,6 +232,49 @@ function hns_send_active_email( $order, $sub ) {
 }
 
 /**
+ * Activate a subscription that's on hold/pending, applying the same guard,
+ * note, log and email behavior the automatic order-status trigger uses.
+ *
+ * Shared by the automatic path below and any Pro-only manual trigger (e.g.
+ * the "send subscription info" action), so both stay consistent and neither
+ * duplicates the HPOS-safe duplicate-activation guard.
+ *
+ * @param WC_Subscription $sub    Subscription to activate.
+ * @param WC_Order        $order  Parent order, used for email/context only.
+ * @param string          $reason Human-readable reason recorded on the subscription.
+ * @return bool True if this call activated the subscription.
+ */
+function hns_activate_subscription( $sub, $order, $reason ) {
+    if ( ! $sub instanceof WC_Subscription ) { return false; }
+    if ( ! in_array( $sub->get_status(), array( 'pending', 'on-hold' ), true ) ) { return false; }
+    if ( $sub->get_meta( '_hns_activated' ) ) { return false; }
+
+    $sub->update_meta_data( '_hns_activated', '1' );
+    $sub->save_meta_data();
+    $sub->update_status( 'active', $reason );
+
+    $opts = hns_get_options();
+    if ( ! empty( $opts['add_order_notes'] ) ) {
+        $sub->add_order_note( sprintf( __( 'HNS: subscription activated. %s', 'hold-new-subscriptions' ), $reason ) );
+    }
+    if ( ! empty( $opts['send_active_email'] ) && $order instanceof WC_Order ) {
+        hns_send_active_email( $order, $sub );
+    }
+    hns_log( 'Subscription activated', array( 'subscription' => $sub->get_id(), 'reason' => $reason ) );
+
+    /**
+     * Fires after HNS activates a subscription, however it was triggered.
+     *
+     * @param WC_Subscription $sub
+     * @param WC_Order        $order
+     * @param string          $reason
+     */
+    do_action( 'hns_subscription_activated', $sub, $order, $reason );
+
+    return true;
+}
+
+/**
  * Core: place subs on-hold after checkout, then activate when order hits desired statuses.
  */
 function hns_boot() {
@@ -217,12 +314,17 @@ function hns_boot() {
             return;
         }
 
-        $activate_statuses = array_map( 'hns_strip_wc_prefix', (array) $opts['activate_on_statuses'] );
+        // Per-subscription options, so a Pro rule (e.g. per-product initial status)
+        // can override the globally configured ones. Free installs get $opts back
+        // unchanged, since no filter is registered.
+        $sub_opts = apply_filters( 'hns_subscription_options', $opts, $sub, $order );
+
+        $activate_statuses = array_map( 'hns_strip_wc_prefix', (array) $sub_opts['activate_on_statuses'] );
         if ( $order->has_status( $activate_statuses ) ) {
             return; // Order already at an activation status — no need to hold.
         }
 
-        $target = in_array( $opts['initial_status'], array( 'on-hold', 'pending' ), true ) ? $opts['initial_status'] : 'on-hold';
+        $target = in_array( $sub_opts['initial_status'], array( 'on-hold', 'pending' ), true ) ? $sub_opts['initial_status'] : 'on-hold';
         $sub->update_meta_data( '_hns_hold_target', $target );
         $sub->save_meta_data();
         hns_log( 'Subscription marked for deferred hold', array( 'subscription' => $sub->get_id(), 'target' => $target ) );
@@ -242,8 +344,6 @@ function hns_boot() {
         $subs = wcs_get_subscriptions_for_order( $order_id, array( 'order_type' => 'parent' ) );
         if ( ! is_array( $subs ) || empty( $subs ) ) return;
 
-        $activate_statuses = array_map( 'hns_strip_wc_prefix', (array) $opts['activate_on_statuses'] );
-
         foreach ( $subs as $sub ) {
             $target = $sub->get_meta( '_hns_hold_target' );
             if ( ! $target ) continue;
@@ -251,6 +351,9 @@ function hns_boot() {
             // Remove flag immediately to prevent duplicate processing on refresh.
             $sub->delete_meta_data( '_hns_hold_target' );
             $sub->save_meta_data();
+
+            $sub_opts = apply_filters( 'hns_subscription_options', $opts, $sub, $order );
+            $activate_statuses = array_map( 'hns_strip_wc_prefix', (array) $sub_opts['activate_on_statuses'] );
 
             if ( $order->has_status( $activate_statuses ) ) {
                 hns_log( 'Hold skipped — order already at activation status', array( 'subscription' => $sub->get_id() ) );
@@ -278,6 +381,15 @@ function hns_boot() {
                 hns_send_hold_email( $order, $sub, $activate_statuses );
             }
             hns_log( 'Subscription set to initial status', array( 'subscription' => $sub->get_id(), 'target' => $target ) );
+
+            /**
+             * Fires after HNS puts a subscription on hold/pending.
+             *
+             * @param WC_Subscription $sub
+             * @param WC_Order        $order
+             * @param string          $target Status the subscription was set to.
+             */
+            do_action( 'hns_subscription_held', $sub, $order, $target );
         }
     };
     add_action( 'woocommerce_thankyou', $hns_apply_hold, 10 );
@@ -290,9 +402,16 @@ function hns_boot() {
         $order = wc_get_order( $order_id );
         if ( ! $order instanceof WC_Order ) return;
 
-        $activate_statuses = array_map( 'hns_strip_wc_prefix', (array) $opts['activate_on_statuses'] );
-        if ( ! in_array( $new_status, $activate_statuses, true ) ) {
-            return;
+        // Fast path: on free installs activate_on_statuses is the same for every
+        // subscription, so we can bail before touching the database at all. Pro
+        // installs may override activate_on_statuses per subscription/product via
+        // the hns_subscription_options filter below, so they can't take this
+        // shortcut — the real check happens per-subscription further down.
+        if ( ! hns_is_pro() ) {
+            $activate_statuses = array_map( 'hns_strip_wc_prefix', (array) $opts['activate_on_statuses'] );
+            if ( ! in_array( $new_status, $activate_statuses, true ) ) {
+                return;
+            }
         }
 
         // Gateways filter
@@ -314,29 +433,20 @@ function hns_boot() {
             $subs = wcs_get_subscriptions_for_order( $order_id, array( 'order_type' => 'any' ) );
             if ( is_wp_error( $subs ) || ! $subs || ! is_array( $subs ) ) { return; }
             foreach ( $subs as $sub ) {
-                $status = $sub->get_status();
-                // Only switch from pending/on-hold to active
-                if ( in_array( $status, array( 'pending', 'on-hold' ), true ) ) {
-                    // Duplicate-activation guard, using the subscription's own CRUD meta API
-                    // so it works correctly whether orders/subscriptions live in wp_postmeta
-                    // or (under HPOS) in the custom order tables. Mirrors the storage used by
-                    // the cleanup handler below. Not fully atomic (read-then-write), but this
-                    // hook does not run concurrently for the same order in practice, matching
-                    // the guarantee the previous add_post_meta()-based guard also relied on.
-                    if ( $sub->get_meta( '_hns_activated' ) ) {
-                        continue;
-                    }
-                    $sub->update_meta_data( '_hns_activated', '1' );
-                    $sub->save_meta_data();
-                    $sub->update_status( 'active', __( 'Activated when parent order reached target status.', 'hold-new-subscriptions' ) );
-                    if ( ! empty( $opts['add_order_notes'] ) ) {
-                        $sub->add_order_note( sprintf( __( 'HNS: subscription activated because parent order status is now "%s".', 'hold-new-subscriptions' ), (string) $new_status ) );
-                    }
-                    if ( ! empty( $opts['send_active_email'] ) ) {
-                        hns_send_active_email( $order, $sub );
-                    }
-                    hns_log( 'Subscription activated', array( 'subscription' => $sub->get_id(), 'order' => $order_id, 'trigger_status' => $new_status ) );
+                // Per-subscription options, so a Pro rule (e.g. per-product activation
+                // statuses) can override the globally configured ones. Free installs get
+                // $opts back unchanged, since no filter is registered.
+                $sub_opts = apply_filters( 'hns_subscription_options', $opts, $sub, $order );
+                $sub_activate_statuses = array_map( 'hns_strip_wc_prefix', (array) $sub_opts['activate_on_statuses'] );
+                if ( ! in_array( $new_status, $sub_activate_statuses, true ) ) {
+                    continue;
                 }
+
+                hns_activate_subscription(
+                    $sub,
+                    $order,
+                    sprintf( __( 'Activated when parent order reached target status "%s".', 'hold-new-subscriptions' ), (string) $new_status )
+                );
             }
         }
     }, 10, 3 );

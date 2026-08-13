@@ -9,8 +9,10 @@ if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 }
 
 /**
- * Remove the plugin's option and the two transient meta flags it uses
- * ('_hns_activated', '_hns_hold_target'). HPOS stores subscription/order meta
+ * Remove the plugin's options and the transient meta flags it uses
+ * ('_hns_activated', '_hns_hold_target', plus '_hns_held_at' and
+ * '_hns_escalated' used only by the Pro escalation timer — harmless to
+ * remove even if Pro was never active). HPOS stores subscription/order meta
  * in a custom table (wp_wc_orders_meta) instead of wp_postmeta, so
  * delete_post_meta_by_key() alone would silently miss it on HPOS sites.
  */
@@ -18,19 +20,26 @@ function hns_uninstall_cleanup_site() {
     global $wpdb;
 
     delete_option( 'hns_options' );
+    delete_option( 'hns_pro_send_info' );
+    delete_option( 'hns_pro_product_rules' );
+    delete_option( 'hns_pro_escalation' );
+    delete_option( 'hns_pro_notifications' );
+
+    $meta_keys = array( '_hns_activated', '_hns_hold_target', '_hns_held_at', '_hns_escalated' );
 
     $hpos_enabled = class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' )
         && \Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled();
 
     if ( $hpos_enabled ) {
         $table = $wpdb->prefix . 'wc_orders_meta';
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $wpdb->delete( $table, array( 'meta_key' => '_hns_activated' ) );
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $wpdb->delete( $table, array( 'meta_key' => '_hns_hold_target' ) );
+        foreach ( $meta_keys as $meta_key ) {
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            $wpdb->delete( $table, array( 'meta_key' => $meta_key ) );
+        }
     } else {
-        delete_post_meta_by_key( '_hns_activated' );
-        delete_post_meta_by_key( '_hns_hold_target' );
+        foreach ( $meta_keys as $meta_key ) {
+            delete_post_meta_by_key( $meta_key );
+        }
     }
 }
 
