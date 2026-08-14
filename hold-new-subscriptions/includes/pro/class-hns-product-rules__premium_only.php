@@ -122,14 +122,22 @@ class HNS_Pro_Product_Rules {
             return array();
         }
 
-        // Deliberately don't filter by 'type' at the wc_get_products() query
-        // level: that relies on a tax_query 'slug' match against the
-        // product_type taxonomy, which on some sites (fresh term/relationship
-        // caches, certain object-cache setups) silently returns nothing even
-        // though the product genuinely is a subscription. Fetching all
-        // published products and filtering with is_type() instead uses the
-        // same type-resolution WooCommerce Subscriptions itself relies on,
-        // so it can't be tripped up by that.
+        // Deliberately don't rely on the classic 'subscription'/'variable-subscription'
+        // product types (via a wc_get_products() 'type' tax_query, or via
+        // $product->is_type()). Since WooCommerce Subscriptions 9.0, "All
+        // Products for Subscriptions" is built into core: a store can attach
+        // one or more subscription plans to an ordinary Simple/Variable
+        // product via "Purchase options" without ever changing its product
+        // type, and those classic subscription types are off by default as
+        // of 9.0. WC_Subscriptions_Product::is_subscription() is the
+        // officially documented, filter-driven check ('woocommerce_is_subscription')
+        // that WooCommerce Subscriptions itself uses internally, and it
+        // correctly recognizes both the classic subscription product types
+        // and the newer plan-based ones.
+        if ( ! class_exists( 'WC_Subscriptions_Product' ) ) {
+            return array();
+        }
+
         $candidates = wc_get_products( array(
             'limit'   => -1,
             'status'  => array( 'publish' ),
@@ -143,7 +151,7 @@ class HNS_Pro_Product_Rules {
 
         $products = array();
         foreach ( $candidates as $product ) {
-            if ( $product instanceof WC_Product && $product->is_type( array( 'subscription', 'variable-subscription' ) ) ) {
+            if ( $product instanceof WC_Product && WC_Subscriptions_Product::is_subscription( $product ) ) {
                 $products[] = $product;
             }
         }

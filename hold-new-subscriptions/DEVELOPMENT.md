@@ -2,7 +2,7 @@
 
 ## Plugin Info
 - **Slug (working):** hold-new-subscriptions
-- **Version:** 1.3.2
+- **Version:** 1.3.3
 - **Author:** Vitalijus Gavinas, for Pro Technologies Limited
 - **Monetization:** none yet — Freemius is intentionally NOT integrated. Code
   correctness and WordPress.org readiness come first; monetization is a
@@ -358,6 +358,61 @@ matches rules against a subscription's actual line-item product IDs, not
 this dropdown list) and the send-info/escalation/notifications modules were
 untouched by this bug.
 
+## 1.3.3 — 1.3.2's fix was still incomplete: the real root cause
+After shipping 1.3.2, the test product **still** didn't show up. The user's
+own screenshots of that product's admin screen showed the actual cause: the
+"Product Type" dropdown on `pro-web-design-uk.local` (running WooCommerce
+Subscriptions **9.1.0**) no longer even offers "Simple subscription" /
+"Variable subscription" as options — only Simple, Grouped, External/Affiliate,
+Variable. Instead there's a "Subscriptions" tab with a "PURCHASE OPTIONS"
+section ("Create custom subscription plans") and a plans table
+(frequency/discount/expiration/signup fee/free trial) attached to an
+otherwise ordinary **Simple product**.
+
+This is a real WooCommerce Subscriptions architecture change, confirmed via
+the official 9.0 announcement and changelog: **"All Products for
+Subscriptions"** (formerly a separate paid extension) was merged into
+WooCommerce Subscriptions core as of **9.0.0**, letting a store attach
+subscription plans to any Simple/Variable/Bundle/Composite product via
+"Purchase options" without ever changing the product's type. The classic
+`subscription` / `variable-subscription` product types have been **off by
+default since 9.0.0** — 9.1.0 (the user's version) even removed the old
+onboarding walkthrough that pointed merchants at those types. So on any
+store running WCS 9.0+, `is_type(['subscription','variable-subscription'])`
+(the 1.3.2 fix) simply never matches these "plan-based" subscription
+products — the product's `WC_Product` class genuinely stays
+`WC_Product_Simple`/`WC_Product_Variable`; the subscription data lives in
+product meta as a "subscription scheme", not in the `product_type` taxonomy
+at all. (The original tax_query-based 1.3.0 approach was never the bug in
+the first place, in other words — both it and the 1.3.2 `is_type()` fix were
+checking the wrong thing entirely for a 9.0+ site.)
+
+**Real fix:** use WooCommerce Subscriptions' own officially documented,
+filter-driven check instead of any product-type test:
+
+```php
+if ( class_exists( 'WC_Subscriptions_Product' ) && WC_Subscriptions_Product::is_subscription( $product ) ) {
+    // subscribable, regardless of classic type vs. 9.0+ purchase-options plans
+}
+```
+
+This is the same abstraction WooCommerce Subscriptions uses internally, is
+driven by the documented `woocommerce_is_subscription` filter specifically
+so third-party/non-classic subscription product types are recognized, and
+needs no meta-key guessing (WooCommerce hasn't publicly documented the exact
+plan-storage meta keys for the merged 9.x feature as of this writing).
+`get_subscription_products()` now guards on `class_exists( 'WC_Subscriptions_Product' )`
+and calls this per product instead of `is_type()`.
+
+**Lesson:** don't assume a product-type check written against WooCommerce
+Subscriptions' classic data model still holds on a current install — 9.0
+changed what "is this a subscription product" even means at the product
+level. When in doubt, use WooCommerce Subscriptions' own public API
+(`WC_Subscriptions_Product::is_subscription()`) rather than re-deriving the
+type from `WC_Product`/taxonomy state, since that API is the one place
+WooCommerce Subscriptions guarantees stays correct across its own internal
+architecture changes.
+
 ## Still open before this is publish-ready
 - Freemius/monetization integration is deliberately not part of this pass.
 - `readme.txt` deliberately does **not** describe the Pro modules yet (no
@@ -378,6 +433,13 @@ untouched by this bug.
   title, and `Text Domain` pick up the WordPress.org-assigned slug).
 
 ## Changelog (dev notes, not the plugin readme)
+### 1.3.3
+- Fixed the Pro product-rules module's subscription-product lookup for real
+  this time: switched from `is_type()` to `WC_Subscriptions_Product::is_subscription()`,
+  which also recognizes WooCommerce Subscriptions 9.0+'s "Purchase options"
+  plan-based subscriptions on ordinary Simple/Variable products (see the
+  "1.3.3" section above).
+
 ### 1.3.2
 - Fixed the Pro product-rules module's subscription-product lookup (see the
   "1.3.2 — live functional testing" section above for the full root-cause
