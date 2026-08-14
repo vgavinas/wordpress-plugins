@@ -3,7 +3,7 @@
  * Plugin Name: Hold New Subscriptions Until Order Completed
  * Description: Puts newly created WooCommerce Subscriptions on hold (configurable) until the parent order reaches selected statuses (e.g. Completed), then activates them.
  * Author: Vitalijus Gavinas
- * Version: 1.3.3
+ * Version: 1.3.4
  * License: GPL-2.0-or-later
  * Text Domain: hold-new-subscriptions
  * Domain Path: /languages
@@ -16,7 +16,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'HNS_PLUGIN_VERSION', '1.3.3' );
+define( 'HNS_PLUGIN_VERSION', '1.3.4' );
 define( 'HNS_PLUGIN_FILE', __FILE__ );
 define( 'HNS_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'HNS_PLUGIN_URL', plugin_dir_url( __FILE__ ) );

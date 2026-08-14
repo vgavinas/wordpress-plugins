@@ -5,7 +5,7 @@ Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.2
 Requires Plugins: woocommerce
-Stable tag: 1.3.3
+Stable tag: 1.3.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,9 @@ The subscription activates as soon as the parent order reaches any one of the st
 1. Settings page under WooCommerce → Hold Subscriptions
 
 == Changelog ==
+
+= 1.3.4 =
+* Internal: the product lookup used by the (still-internal, non-public) Pro module now also recognizes WooCommerce Subscriptions 9.0+ "Purchase options" products correctly — confirmed against a live WCS 9.1.0 test site that `WC_Subscriptions_Product::is_subscription()` alone does not detect them; added the `WCS_ATT_Product_Schemes::has_subscription_schemes()` check used internally by that feature. No behaviour change for this (free) build.
 
 = 1.3.3 =
 * Internal: the product lookup used by the (still-internal, non-public) Pro module now uses WooCommerce Subscriptions' own `WC_Subscriptions_Product::is_subscription()` check instead of the classic subscription product type, so it also recognizes products using WooCommerce Subscriptions 9.0+'s built-in "Purchase options" (subscription plans on ordinary Simple/Variable products). No behaviour change for this (free) build.

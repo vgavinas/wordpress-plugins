@@ -122,22 +122,6 @@ class HNS_Pro_Product_Rules {
             return array();
         }
 
-        // Deliberately don't rely on the classic 'subscription'/'variable-subscription'
-        // product types (via a wc_get_products() 'type' tax_query, or via
-        // $product->is_type()). Since WooCommerce Subscriptions 9.0, "All
-        // Products for Subscriptions" is built into core: a store can attach
-        // one or more subscription plans to an ordinary Simple/Variable
-        // product via "Purchase options" without ever changing its product
-        // type, and those classic subscription types are off by default as
-        // of 9.0. WC_Subscriptions_Product::is_subscription() is the
-        // officially documented, filter-driven check ('woocommerce_is_subscription')
-        // that WooCommerce Subscriptions itself uses internally, and it
-        // correctly recognizes both the classic subscription product types
-        // and the newer plan-based ones.
-        if ( ! class_exists( 'WC_Subscriptions_Product' ) ) {
-            return array();
-        }
-
         $candidates = wc_get_products( array(
             'limit'   => -1,
             'status'  => array( 'publish' ),
@@ -151,12 +135,47 @@ class HNS_Pro_Product_Rules {
 
         $products = array();
         foreach ( $candidates as $product ) {
-            if ( $product instanceof WC_Product && WC_Subscriptions_Product::is_subscription( $product ) ) {
+            if ( $product instanceof WC_Product && self::product_is_subscribable( $product ) ) {
                 $products[] = $product;
             }
         }
 
         return $products;
+    }
+
+    /**
+     * Whether a product can be purchased as a subscription, covering both
+     * WooCommerce Subscriptions data models:
+     *
+     * 1. The classic 'subscription' / 'variable-subscription' product types
+     *    — WC_Subscriptions_Product::is_subscription() (filter-driven via
+     *    'woocommerce_is_subscription') is the officially documented check
+     *    for these.
+     * 2. WooCommerce Subscriptions 9.0+'s built-in "All Products for
+     *    Subscriptions" ("Purchase options"): subscription plans attached to
+     *    an ordinary Simple/Variable product without changing its product
+     *    type at all — WC_Subscriptions_Product::is_subscription() does NOT
+     *    recognize these (confirmed empirically against a live WCS 9.1.0
+     *    site: it returned false for a product with 3 active plans).
+     *    WCS_ATT_Product_Schemes::has_subscription_schemes() is the correct,
+     *    status-aware check here — it already accounts for the product's
+     *    own enable/disable/override setting (confirmed: false for products
+     *    with schemes present but status 'disable', true for products with
+     *    active schemes under 'inherit'/'override').
+     *
+     * @param WC_Product $product
+     * @return bool
+     */
+    private static function product_is_subscribable( $product ) {
+        if ( class_exists( 'WC_Subscriptions_Product' ) && method_exists( 'WC_Subscriptions_Product', 'is_subscription' ) && WC_Subscriptions_Product::is_subscription( $product ) ) {
+            return true;
+        }
+
+        if ( class_exists( 'WCS_ATT_Product_Schemes' ) && method_exists( 'WCS_ATT_Product_Schemes', 'has_subscription_schemes' ) && WCS_ATT_Product_Schemes::has_subscription_schemes( $product ) ) {
+            return true;
+        }
+
+        return false;
     }
 
     public static function render_settings() {

@@ -2,7 +2,7 @@
 
 ## Plugin Info
 - **Slug (working):** hold-new-subscriptions
-- **Version:** 1.3.3
+- **Version:** 1.3.4
 - **Author:** Vitalijus Gavinas, for Pro Technologies Limited
 - **Monetization:** none yet — Freemius is intentionally NOT integrated. Code
   correctness and WordPress.org readiness come first; monetization is a
@@ -413,6 +413,50 @@ type from `WC_Product`/taxonomy state, since that API is the one place
 WooCommerce Subscriptions guarantees stays correct across its own internal
 architecture changes.
 
+## 1.3.4 — 1.3.3's fix was ALSO still wrong: `is_subscription()` doesn't cover Purchase Options either
+`WC_Subscriptions_Product::is_subscription()` turned out to only cover the
+classic `subscription`/`variable-subscription` product types after all —
+confirmed empirically with a temporary debug snippet added to the test site
+(`pro-web-design-uk.local`, WCS 9.1.0) that called it directly against real
+products. Result: **false** for a product with 3 active subscription plans
+attached via "Purchase options", and **false** from the documented
+`woocommerce_is_subscription` filter too. So the "official, filter-driven,
+future-proof" reasoning in the 1.3.3 section above was wrong — that filter
+apparently isn't (yet, as of 9.1.0) wired up to fire true for Purchase
+Options products, contrary to what the public docs implied.
+
+The same debug snippet dumped the product's actual postmeta and found
+`_wcsatt_schemes`, `_wcsatt_schemes_status`, `_wcsatt_force_subscription`,
+`_wcsatt_storewide_selection_mode` — the **exact meta key names from the
+pre-merge "All Products for Subscriptions" extension**, confirmed still
+in use, unchanged, inside WCS 9.x core. The class `WCS_ATT_Product_Schemes`
+(also from that pre-merge extension) is loaded and live. Calling
+`WCS_ATT_Product_Schemes::has_subscription_schemes( $product )` directly
+against the same test products gave the correct, status-aware answer:
+`true` for the two products with active plans (3 and 2 schemes), `false`
+for two other products that have the wcsatt meta keys present but
+`_wcsatt_schemes_status = disable` — i.e. it already accounts for the
+product's own enable/disable/override setting, not just "does any
+scheme-shaped meta exist."
+
+**Real fix:** `get_subscription_products()` now calls a new
+`product_is_subscribable( $product )` helper that checks, in order:
+1. `WC_Subscriptions_Product::is_subscription( $product )` — still correct
+   for the classic product types, kept as a fallback for stores/products
+   that use them.
+2. `WCS_ATT_Product_Schemes::has_subscription_schemes( $product )` — covers
+   9.0+ Purchase Options products; this is the one that was missing.
+
+**Lesson (supersedes the 1.3.3 one above):** don't trust a public docs page
+that hasn't been updated for a recently-merged feature, no matter how
+authoritative the surrounding API looks — WooCommerce's own docs for this
+area were explicitly flagged (during research) as not yet updated post-9.0.
+When a closed-source dependency's documented API doesn't match observed
+behavior, get a debug snippet onto a real install and confirm empirically
+(`get_class_methods()` on the suspect classes, direct method calls against
+real data, raw postmeta dump) rather than reasoning further from
+documentation or plausible-sounding API names.
+
 ## Still open before this is publish-ready
 - Freemius/monetization integration is deliberately not part of this pass.
 - `readme.txt` deliberately does **not** describe the Pro modules yet (no
@@ -433,6 +477,14 @@ architecture changes.
   title, and `Text Domain` pick up the WordPress.org-assigned slug).
 
 ## Changelog (dev notes, not the plugin readme)
+### 1.3.4
+- Fixed the Pro product-rules module's subscription-product lookup a third
+  time, this time confirmed empirically against a live WCS 9.1.0 site:
+  added `WCS_ATT_Product_Schemes::has_subscription_schemes()` alongside
+  `WC_Subscriptions_Product::is_subscription()` (see the "1.3.4" section
+  above for the full empirical writeup — 1.3.3's fix didn't actually cover
+  WooCommerce Subscriptions 9.0+ "Purchase options" products).
+
 ### 1.3.3
 - Fixed the Pro product-rules module's subscription-product lookup for real
   this time: switched from `is_type()` to `WC_Subscriptions_Product::is_subscription()`,
