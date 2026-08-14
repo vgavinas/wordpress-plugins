@@ -2,7 +2,7 @@
 
 ## Plugin Info
 - **Slug (working):** hold-new-subscriptions
-- **Version:** 1.3.1
+- **Version:** 1.3.2
 - **Author:** Vitalijus Gavinas, for Pro Technologies Limited
 - **Monetization:** none yet — Freemius is intentionally NOT integrated. Code
   correctness and WordPress.org readiness come first; monetization is a
@@ -323,6 +323,41 @@ All 11 errors and 5 warnings from the 1.3.0 report are resolved and nothing
 new surfaced. The free/current build is functionally publish-ready from a
 Plugin Check standpoint — see below for what's still deliberately deferred.
 
+## 1.3.2 — live functional testing, first Pro bug found
+First live test of HNS Pro (via a `wp-content/mu-plugins/` filter override
+forcing `hns_is_pro()` true — a `wp-config.php` override doesn't work: too
+early = `add_filter()` undefined before `wp-settings.php` loads it; too late
+= `plugins_loaded` already fired inside that same require) on a local
+WooCommerce + WooCommerce Subscriptions site (`pro-web-design-uk.local`).
+
+**Bug found:** the "Правила по товарам/тарифам" (product rules) settings
+section showed "Не найдено товаров-подписок." even though a published
+subscription-type product existed on the site. Root cause: `get_subscription_products()`
+in `class-hns-product-rules__premium_only.php` filtered via
+`wc_get_products( array( 'type' => array( 'subscription', 'variable-subscription' ), ... ) )`,
+which resolves to a `tax_query` matching the `product_type` taxonomy by slug.
+That's the standard approach and normally works, but proved unreliable on
+this install — plausibly a taxonomy term-relationship cache timing issue
+(known to be flaky in some WordPress/object-cache setups right after a term
+relationship is saved), though the exact WP-side cause wasn't confirmed
+since there's no direct DB/debug access to that site from this session.
+
+**Fix:** stopped filtering by `type` at the query level entirely. Instead,
+`get_subscription_products()` now fetches all published products (no `type`
+arg) and filters in PHP with `$product->is_type( array( 'subscription', 'variable-subscription' ) )`
+— the same type-resolution method WooCommerce Subscriptions itself and
+other integrations rely on. This can't be tripped up by a tax_query slug-match
+edge case, since it reads the already-loaded product object's own type
+instead of re-querying a taxonomy relationship. Slightly less efficient on
+very large catalogs (loads every published product instead of pre-filtering
+in SQL), but this only runs on an admin settings page render, not on the
+storefront or checkout path, so that trade-off is fine.
+
+No other Pro modules were affected — `filter_subscription_options()` (which
+matches rules against a subscription's actual line-item product IDs, not
+this dropdown list) and the send-info/escalation/notifications modules were
+untouched by this bug.
+
 ## Still open before this is publish-ready
 - Freemius/monetization integration is deliberately not part of this pass.
 - `readme.txt` deliberately does **not** describe the Pro modules yet (no
@@ -343,6 +378,11 @@ Plugin Check standpoint — see below for what's still deliberately deferred.
   title, and `Text Domain` pick up the WordPress.org-assigned slug).
 
 ## Changelog (dev notes, not the plugin readme)
+### 1.3.2
+- Fixed the Pro product-rules module's subscription-product lookup (see the
+  "1.3.2 — live functional testing" section above for the full root-cause
+  writeup).
+
 ### 1.3.0
 - Added the Pro architecture (`hns_is_pro()`, conditional `__premium_only.php`
   loading) and three free-file extension points

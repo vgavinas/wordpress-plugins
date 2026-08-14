@@ -118,14 +118,37 @@ class HNS_Pro_Product_Rules {
     /* --------------------------------------------------------------------- */
 
     private static function get_subscription_products() {
-        $products = wc_get_products( array(
+        if ( ! function_exists( 'wc_get_products' ) ) {
+            return array();
+        }
+
+        // Deliberately don't filter by 'type' at the wc_get_products() query
+        // level: that relies on a tax_query 'slug' match against the
+        // product_type taxonomy, which on some sites (fresh term/relationship
+        // caches, certain object-cache setups) silently returns nothing even
+        // though the product genuinely is a subscription. Fetching all
+        // published products and filtering with is_type() instead uses the
+        // same type-resolution WooCommerce Subscriptions itself relies on,
+        // so it can't be tripped up by that.
+        $candidates = wc_get_products( array(
             'limit'   => -1,
-            'status'  => 'publish',
-            'type'    => array( 'subscription', 'variable-subscription' ),
+            'status'  => array( 'publish' ),
             'orderby' => 'title',
             'order'   => 'ASC',
         ) );
-        return is_array( $products ) ? $products : array();
+
+        if ( ! is_array( $candidates ) ) {
+            return array();
+        }
+
+        $products = array();
+        foreach ( $candidates as $product ) {
+            if ( $product instanceof WC_Product && $product->is_type( array( 'subscription', 'variable-subscription' ) ) ) {
+                $products[] = $product;
+            }
+        }
+
+        return $products;
     }
 
     public static function render_settings() {

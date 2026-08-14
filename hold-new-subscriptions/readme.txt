@@ -5,7 +5,7 @@ Requires at least: 5.8
 Tested up to: 7.0
 Requires PHP: 7.2
 Requires Plugins: woocommerce
-Stable tag: 1.3.1
+Stable tag: 1.3.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,6 +66,9 @@ The subscription activates as soon as the parent order reaches any one of the st
 1. Settings page under WooCommerce → Hold Subscriptions
 
 == Changelog ==
+
+= 1.3.2 =
+* Internal: hardened the product lookup used by the (still-internal, non-public) Pro module so it can't miss an existing subscription product due to a taxonomy query edge case. No behaviour change for this (free) build.
 
 = 1.3.1 =
 * Fixed: Plugin Check errors — missing translators comments on strings with placeholders, and unescaped subscription/order IDs in the email templates (now cast with `absint()`).
