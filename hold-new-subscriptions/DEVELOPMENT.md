@@ -457,6 +457,39 @@ behavior, get a debug snippet onto a real install and confirm empirically
 real data, raw postmeta dump) rather than reasoning further from
 documentation or plausible-sounding API names.
 
+**Backward compatibility with older WooCommerce Subscriptions installs:**
+`product_is_subscribable()`'s two checks are each guarded with
+`class_exists()` + `method_exists()`, so neither can fatal-error on an
+install where the relevant class/method is missing — that branch is simply
+skipped:
+- Stores on any reasonably current WCS version using only the classic
+  `subscription`/`variable-subscription` product types (the norm before
+  9.0, and still fully supported after) are matched by
+  `WC_Subscriptions_Product::is_subscription()` alone, exactly as before —
+  `WC_Subscriptions_Product` and this method have existed in WCS core for a
+  very long time, well before 9.0.
+- Stores that had the separate paid extension "All Products for WooCommerce
+  Subscriptions" installed *before* the 9.0 merge (a common combo — this
+  was the standalone Purchase Options-equivalent feature pre-9.0) are also
+  matched by `WCS_ATT_Product_Schemes::has_subscription_schemes()`: this
+  class and its meta key names originate from that same standalone
+  extension (and its open-source precursor, "WooCommerce Subscribe to All
+  the Things") and were carried into WCS 9.x core unchanged, so a pre-9.0
+  store with the classic extension installed hits the exact same code path
+  as a post-9.0 store's built-in Purchase Options.
+- A store with neither (old WCS, no APfS extension) simply never has
+  Purchase-Options-style products in its catalog to begin with, so the
+  missing second check costs nothing there.
+
+Not live-tested against an actual pre-9.0 WCS install (none available in
+this session) — verified by guard logic and by `WC_Subscriptions_Product`
+predating 9.0 by years, not by direct observation the way the 9.1.0 case
+was. Worth a quick sanity check if/when HNS Pro is ever pointed at a site
+running an older WCS version. None of the three live production sites
+(russiantvonline.co.uk, arlekino.live, vipmedia.tv) run HNS Pro yet —
+`hns_is_pro()` is still hard-coded false everywhere except this local test
+site, so there's no live-site risk from this either way right now.
+
 ## Still open before this is publish-ready
 - Freemius/monetization integration is deliberately not part of this pass.
 - `readme.txt` deliberately does **not** describe the Pro modules yet (no
