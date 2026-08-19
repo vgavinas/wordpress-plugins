@@ -1,15 +1,26 @@
 # Order Note Templates for WooCommerce — Development Notes
 
 ## Plugin Info
-- **Slug:** order-note-templates-for-woocommerce
+- **Freemius slug (immutable):** order-note-templates-for-woocommerce
+- **WordPress.org slug:** pro-web-design-order-note-templates-for-woocommerce
+- **WordPress.org:** live — https://wordpress.org/plugins/pro-web-design-order-note-templates-for-woocommerce/
+  (submitted August 7, 2026; approved and published to SVN some time after —
+  exact approval/publish date not recorded here, confirmed live by directly
+  opening the URL. New listings can take ~6–14 days after the SVN commit to
+  show up in wordpress.org's on-site search, even once the page itself is
+  live — don't read "not in search yet" as "not published.")
 - **Version:** 1.1.6
 - **GitHub:** https://github.com/vgavinas/wordpress-plugins
-- **WordPress.org:** submitted August 7, 2026 — awaiting review
 - **Freemius Product ID:** 36694
 - **Freemius function:** ontfw_fs()
 
-> ⚠️ The Freemius slug in the SDK snippet MUST match the WordPress.org slug exactly:
-> `order-note-templates-for-woocommerce`. A mismatch breaks free-version auto-updates.
+> ⚠️ The Freemius slug (`order-note-templates-for-woocommerce`) and the
+> WordPress.org-assigned slug (`pro-web-design-order-note-templates-for-woocommerce`)
+> are DIFFERENT — same situation as Order Tags & Labels. The file name,
+> folder name, and the `'slug'` value in the Freemius SDK snippet must stay on
+> the original Freemius slug forever (changing it would orphan existing
+> installs); only the `Plugin Name` header, readme title, and `Text Domain`
+> use the WordPress.org-assigned slug/branding.
 
 ## Freemius
 - **Account:** dashboard.freemius.com
@@ -84,7 +95,8 @@ order-note-templates-for-woocommerce/
 - [ ] Upload zip to Freemius → Deployment → Add New Version
 - [ ] Release in Freemius
 - [ ] Push to GitHub
-- [ ] If approved on WordPress.org → upload free version via SVN
+- [x] Approved on WordPress.org → free version uploaded via SVN — live at
+      https://wordpress.org/plugins/pro-web-design-order-note-templates-for-woocommerce/
 
 ## Schema Rules
 
