@@ -9,7 +9,7 @@
   opening the URL. New listings can take ~6–14 days after the SVN commit to
   show up in wordpress.org's on-site search, even once the page itself is
   live — don't read "not in search yet" as "not published.")
-- **Version:** 1.2.4
+- **Version:** 1.2.5
 - **GitHub:** https://github.com/vgavinas/wordpress-plugins
 - **Freemius Product ID:** 36694
 - **Freemius function:** ontfw_fs()
@@ -197,6 +197,20 @@ Run Plugin Check against the **generated free build**, not the dev source —
 they differ.
 
 ## Changelog
+### 1.2.5
+- Fixed: the main plugin file's DocBlock still had a hardcoded `Tested up to: 7.0`
+  line, left over from before the 1.2.4 bump. WordPress.org's Plugin Check
+  confirmed this explicitly (`mismatched_tested_up_to_header`): **the plugin
+  file's header value takes priority over readme.txt's `Tested up to`** when
+  both are present. That's why the live directory kept showing "7.0.4"
+  (WordPress.org's normalized latest-patch display for "7.0") even after
+  readme.txt was correctly bumped to 7.1 in 1.2.4 — it was reading the stale
+  plugin-file header, not readme.txt. Removed the line from the plugin file
+  entirely rather than just updating it to 7.1 — `Tested up to` isn't a real
+  WordPress plugin-header field (it only means anything in readme.txt), and
+  Order Tags & Labels never had it in its plugin file, which is exactly why
+  OTL didn't hit this bug. One source of truth now, can't drift again.
+
 ### 1.2.4
 - Bumped `Tested up to` (readme header) from 7.0 to 7.1 following the
   WordPress core update. Plugin Check flags a stale `Tested up to` as an
