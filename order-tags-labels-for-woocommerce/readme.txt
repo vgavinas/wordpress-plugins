@@ -2,9 +2,9 @@
 Contributors: prowebdeignuk, freemius
 Tags: woocommerce, order tags, order labels, order management, admin
 Requires at least: 6.2
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.5
+Stable tag: 1.1.6
 Requires Plugins: woocommerce
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -70,6 +70,9 @@ Filtering and bulk tag actions are Professional features.
 4. Auto-tag rules (Professional).
 
 == Changelog ==
+
+= 1.1.6 =
+* Internal: bumped "Tested up to" to 7.1 following the WordPress core update — Plugin Check flags an outdated "Tested up to" header as an error that keeps a plugin out of on-site search results.
 
 = 1.1.5 =
 * Internal: text domain changed back to `pro-web-design-order-tags-labels-for-woocommerce`, matching the plugin's actual WordPress.org directory slug (the file name, folder name and Freemius product slug stay on the original `order-tags-labels-for-woocommerce` identifiers). Same convention already used by Order Note Templates.

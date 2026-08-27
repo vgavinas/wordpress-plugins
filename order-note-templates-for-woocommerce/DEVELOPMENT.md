@@ -9,7 +9,7 @@
   opening the URL. New listings can take ~6–14 days after the SVN commit to
   show up in wordpress.org's on-site search, even once the page itself is
   live — don't read "not in search yet" as "not published.")
-- **Version:** 1.1.6
+- **Version:** 1.2.4
 - **GitHub:** https://github.com/vgavinas/wordpress-plugins
 - **Freemius Product ID:** 36694
 - **Freemius function:** ontfw_fs()
@@ -197,6 +197,17 @@ Run Plugin Check against the **generated free build**, not the dev source —
 they differ.
 
 ## Changelog
+### 1.2.4
+- Bumped `Tested up to` (readme header) from 7.0 to 7.1 following the
+  WordPress core update. Plugin Check flags a stale `Tested up to` as an
+  **error** (`outdated_tested_upto_header`), not just a warning — WordPress.org
+  excludes plugins with this error from on-site search results, so this
+  needs to be kept current after every WordPress core release, not just at
+  submission time. (Note: this dev-notes changelog had a gap between 1.1.6
+  and 1.2.4 — the plugin's own `readme.txt` changelog has the entries for
+  1.1.7–1.2.3 that weren't mirrored here; not backfilling that gap now since
+  I wasn't present for those changes.)
+
 ### 1.1.6
 - phpcs suppressions moved onto standalone lines so the free build keeps them
 

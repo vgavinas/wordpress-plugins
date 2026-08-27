@@ -2,7 +2,7 @@
 
 ## Plugin Info
 - **Slug (working):** hold-new-subscriptions
-- **Version:** 1.3.4
+- **Version:** 1.3.5
 - **Author:** Vitalijus Gavinas, for Pro Technologies Limited
 - **Monetization:** none yet — Freemius is intentionally NOT integrated. Code
   correctness and WordPress.org readiness come first; monetization is a

@@ -3,7 +3,7 @@
 ## Plugin Info
 - **Freemius slug (immutable):** order-tags-labels-for-woocommerce
 - **WordPress.org slug:** pro-web-design-order-tags-labels-for-woocommerce
-- **Version:** 1.1.5
+- **Version:** 1.1.6
 - **GitHub:** https://github.com/vgavinas/wordpress-plugins
 - **WordPress.org:** approved August 13, 2026
 - **Freemius Product ID:** 36737 (Store ID 18989)
@@ -61,6 +61,14 @@ Run Plugin Check against the **generated free build** (or the stripped SVN
 copy), not the dev source — they differ.
 
 ## Changelog (dev notes, not the plugin readme)
+### 1.1.6
+- Bumped `Tested up to` (readme header) from 7.0 to 7.1 following the
+  WordPress core update. Plugin Check flags a stale `Tested up to` as an
+  **error** (`outdated_tested_upto_header`), not just a warning — WordPress.org
+  excludes plugins with this error from on-site search results, so this
+  needs to be kept current after every WordPress core release, not just at
+  submission time.
+
 ### 1.1.5
 - Text domain aligned to `pro-web-design-order-tags-labels-for-woocommerce`
   to match the WordPress.org-assigned slug (file/folder/Freemius-slug stay

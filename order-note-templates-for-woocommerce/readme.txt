@@ -2,10 +2,10 @@
 Contributors: prowebdeignuk, freemius
 Tags: woocommerce, order notes, templates, subscriptions, hpos
 Requires at least: 5.8
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,9 @@ No. The plugin only loads its assets on WooCommerce order and subscription admin
 6. Automatically add a note when an order changes status
 
 == Changelog ==
+
+= 1.2.4 =
+* Internal: bumped "Tested up to" to 7.1 following the WordPress core update — Plugin Check flags an outdated "Tested up to" header as an error that keeps a plugin out of on-site search results.
 
 = 1.2.3 =
 * Fixed: template category handling (the field, its save logic and the DB-column check) was still present in the free version's shared code, only inert — moved entirely into the Professional-only module so it is physically absent from the free build, matching how PDF attachments are already handled
