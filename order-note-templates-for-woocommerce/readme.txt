@@ -5,7 +5,7 @@ Requires at least: 5.8
 Tested up to: 7.1
 Requires PHP: 7.4
 Requires Plugins: woocommerce
-Stable tag: 1.2.5
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -79,6 +79,9 @@ No. The plugin only loads its assets on WooCommerce order and subscription admin
 6. Automatically add a note when an order changes status
 
 == Changelog ==
+
+= 1.2.6 =
+* Internal: bumped the plugin header's "WC tested up to" from 10.8 to 11.1, confirmed against a live test site running WooCommerce 11.1.1 and WooCommerce Subscriptions 9.2.0 with no issues.
 
 = 1.2.5 =
 * Fixed: the plugin file's own header comment still had a hardcoded "Tested up to: 7.0" line left over from before the 1.2.4 update. WordPress.org gives the plugin-header value priority over the readme's "Tested up to" when both are present, so the directory kept showing 7.0 (normalized to the latest 7.0.x release) even after readme.txt was correctly bumped to 7.1 in 1.2.4. Removed the header line entirely — "Tested up to" is a readme.txt-only field and doesn't belong in the plugin file, matching how Order Tags & Labels already does it — so this can't happen again.

@@ -9,7 +9,7 @@
   opening the URL. New listings can take ~6–14 days after the SVN commit to
   show up in wordpress.org's on-site search, even once the page itself is
   live — don't read "not in search yet" as "not published.")
-- **Version:** 1.2.5
+- **Version:** 1.2.6
 - **GitHub:** https://github.com/vgavinas/wordpress-plugins
 - **Freemius Product ID:** 36694
 - **Freemius function:** ontfw_fs()
@@ -197,6 +197,12 @@ Run Plugin Check against the **generated free build**, not the dev source —
 they differ.
 
 ## Changelog
+### 1.2.6
+- Bumped the plugin header's `WC tested up to` from 10.8 to 11.1. Confirmed
+  against a live test site (Local by Flywheel) running WooCommerce 11.1.1 and
+  WooCommerce Subscriptions 9.2.0, updated in the same maintenance pass — no
+  errors, note templates and HPOS integration work as expected.
+
 ### 1.2.5
 - Fixed: the main plugin file's DocBlock still had a hardcoded `Tested up to: 7.0`
   line, left over from before the 1.2.4 bump. WordPress.org's Plugin Check

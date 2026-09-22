@@ -3,7 +3,7 @@
 ## Plugin Info
 - **Freemius slug (immutable):** order-tags-labels-for-woocommerce
 - **WordPress.org slug:** pro-web-design-order-tags-labels-for-woocommerce
-- **Version:** 1.1.6
+- **Version:** 1.1.7
 - **GitHub:** https://github.com/vgavinas/wordpress-plugins
 - **WordPress.org:** approved August 13, 2026
 - **Freemius Product ID:** 36737 (Store ID 18989)
@@ -61,6 +61,12 @@ Run Plugin Check against the **generated free build** (or the stripped SVN
 copy), not the dev source — they differ.
 
 ## Changelog (dev notes, not the plugin readme)
+### 1.1.7
+- Bumped the plugin header's `WC tested up to` from 11.0 to 11.1. Confirmed
+  against a live test site (Local by Flywheel) running WooCommerce 11.1.1 and
+  WooCommerce Subscriptions 9.2.0, updated in the same maintenance pass — no
+  errors, order tagging/filtering works as expected.
+
 ### 1.1.6
 - Bumped `Tested up to` (readme header) from 7.0 to 7.1 following the
   WordPress core update. Plugin Check flags a stale `Tested up to` as an

@@ -4,7 +4,7 @@ Tags: woocommerce, order tags, order labels, order management, admin
 Requires at least: 6.2
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 Requires Plugins: woocommerce
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -70,6 +70,9 @@ Filtering and bulk tag actions are Professional features.
 4. Auto-tag rules (Professional).
 
 == Changelog ==
+
+= 1.1.7 =
+* Internal: bumped the plugin header's "WC tested up to" from 11.0 to 11.1, confirmed against a live test site running WooCommerce 11.1.1 and WooCommerce Subscriptions 9.2.0 with no issues.
 
 = 1.1.6 =
 * Internal: bumped "Tested up to" to 7.1 following the WordPress core update — Plugin Check flags an outdated "Tested up to" header as an error that keeps a plugin out of on-site search results.
