@@ -1,5 +1,28 @@
 # Order Note Templates for WooCommerce — Development Notes
 
+## ⏳ Unreleased — ship with the next version
+
+**git is ahead of what is published.** Commit `b127b1f` (Sept 30, 2026) changed
+the plugin header but deliberately did NOT bump the version, so wordpress.org
+trunk and the Freemius builds do not have it yet.
+
+- `Plugin URI` now points at https://www.pro-webdesign.co.uk/plugins/order-note-templates
+  instead of at this plugin's own wordpress.org page (which was self-referential
+  and gave the listing no route to our site at all — a visitor who wanted Pro had
+  nowhere to click).
+- `Author URI` normalised to the `www` host, matching Order Tags & Labels.
+
+When cutting the next release, add a changelog line for this in readme.txt and
+in the section below.
+
+> Why it is NOT an SEO fix: wordpress.org marks every author-supplied external
+> link `rel="nofollow ugc"` — verified Sept 30, 2026 on our own listing and
+> cross-checked on the WooCommerce listing (17 of 17 external author links
+> nofollow; only WordPress's own project sites are followed). This includes the
+> sidebar "Plugin homepage" link generated from `Plugin URI`. The change is worth
+> shipping for human visitors, not for search ranking — don't re-justify it as a
+> backlink.
+
 ## Plugin Info
 - **Freemius slug (immutable):** order-note-templates-for-woocommerce
 - **WordPress.org slug:** pro-web-design-order-note-templates-for-woocommerce

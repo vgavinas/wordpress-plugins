@@ -1,5 +1,29 @@
 # Order Tags & Labels for WooCommerce — Development Notes
 
+## ⏳ Unreleased — ship with the next version
+
+**git is ahead of what is published.** Commit `b127b1f` (Sept 30, 2026) changed
+the plugin header and readme but deliberately did NOT bump the version, so
+wordpress.org trunk and the Freemius builds do not have it yet.
+
+- `Plugin URI` now points at https://www.pro-webdesign.co.uk/plugins/order-tags-labels
+  instead of at this plugin's own wordpress.org page.
+- readme.txt: the "Upgrade to Professional" link used the old path
+  `/plugins/order-tags-labels-for-woocommerce`, which 404s. Corrected to
+  `/plugins/order-tags-labels`. A redirect was added on the site on Sept 30, 2026
+  as a stopgap, so the live listing is not broken meanwhile — but the source is
+  now right and the release should not depend on that redirect.
+
+When cutting the next release, add a changelog line for this in readme.txt and
+in the section below.
+
+> Why it is NOT an SEO fix: wordpress.org marks every author-supplied external
+> link `rel="nofollow ugc"` — verified Sept 30, 2026 on this listing and
+> cross-checked on the WooCommerce listing (17 of 17 external author links
+> nofollow; only WordPress's own project sites are followed). This includes the
+> sidebar "Plugin homepage" link generated from `Plugin URI`. Worth shipping for
+> human visitors, not for search ranking.
+
 ## Plugin Info
 - **Freemius slug (immutable):** order-tags-labels-for-woocommerce
 - **WordPress.org slug:** pro-web-design-order-tags-labels-for-woocommerce
