@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name: Pro Web Design Order Note Templates for WooCommerce
- * Plugin URI:  https://wordpress.org/plugins/pro-web-design-order-note-templates-for-woocommerce/
+ * Plugin URI:  https://www.pro-webdesign.co.uk/plugins/order-note-templates
  * Description: Save and reuse order note templates in WooCommerce admin. Works with HPOS and WooCommerce Subscriptions.
  * Version:     1.2.6
  * Author:      Pro Technologies Limited
- * Author URI:  https://pro-webdesign.co.uk
+ * Author URI:  https://www.pro-webdesign.co.uk
  * Text Domain: pro-web-design-order-note-templates-for-woocommerce
  * Domain Path: /languages
  * Requires at least: 5.8

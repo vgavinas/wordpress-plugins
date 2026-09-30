@@ -31,7 +31,7 @@ Organize WooCommerce orders with color-coded tags. Assign manually or automatica
 * WooCommerce Subscriptions support
 * Priority email support
 
-[Upgrade to Professional](https://www.pro-webdesign.co.uk/plugins/order-tags-labels-for-woocommerce) to unlock automation, filtering, bulk actions and export.
+[Upgrade to Professional](https://www.pro-webdesign.co.uk/plugins/order-tags-labels) to unlock automation, filtering, bulk actions and export.
 
 = Also by Pro Technologies Limited =
 

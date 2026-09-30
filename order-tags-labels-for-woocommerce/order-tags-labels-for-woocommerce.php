@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Pro Web Design Order Tags & Labels for WooCommerce
- * Plugin URI:        https://wordpress.org/plugins/pro-web-design-order-tags-labels-for-woocommerce/
+ * Plugin URI:        https://www.pro-webdesign.co.uk/plugins/order-tags-labels
  * Description:       Organize WooCommerce orders with color-coded tags. Assign tags manually or automatically, filter and bulk-manage tagged orders.
  * Version:           1.1.7
  * Requires at least: 6.2
